@@ -482,21 +482,37 @@ if __name__ == '__main__':
             else:
                 print('Sorry, wrong selection, please try again')
         elif sel == '2':
-            print("\033[4;34mTrainer Options:\033[0m\n1:Schedule Management\n2:Search For a memeber")
+            print("\033[4;34mTrainer Options:\033[0m\n1:Schedule Management\n2:Search For a memeber\n3:Exit")
             op = input('->')
             if op == '1':
-                availabilities = [
-                    ('08:00:00', '17:00:00', 'Monday'),
-                    ('09:00:00', '18:00:00', 'Tuesday'),
-                    ('10:00:00', '19:00:00', 'Wednesday'),
-                    ('11:00:00', '20:00:00', 'Thursday'),
-                    ('08:00:00', '12:00:00', 'Friday')
-                ]
+                # availabilities = [
+                #     ('08:00:00', '17:00:00', 'Monday'),
+                #     ('09:00:00', '18:00:00', 'Tuesday'),
+                #     ('10:00:00', '19:00:00', 'Wednesday'),
+                #     ('11:00:00', '20:00:00', 'Thursday'),
+                #     ('08:00:00', '12:00:00', 'Friday')
+                # ]
                 trainer_id = input("Please Enter Trainer ID:\n->")
+                availabilities = []
+                start_time = ''
+                print('Enter your availability, enter "E" to exit')
+                while True:
+                    start_time = input("Start Time or 'E' to exit\n->")
+                    if start_time == "E":
+                        break
+                    end_time = input("End Time\n->")
+                    day_week = input("Day Week\n->")
+                    availabilities.append((start_time, end_time, day_week))
+
                 set_trainer_availability(trainer_id, availabilities)
             elif op == '2':
                 search_name = input("Search for a member by name ")
                 display_members_by_name(search_name)
+            elif op == '3':
+                sel = ''
+                continue
+            else:
+                print('Sorry, wrong selection, please try again')
         elif sel == '3':
             print("\033[4;35mStaff Options\033[0m\n1:View Room Bookings\n2:")
         elif sel == '4':
