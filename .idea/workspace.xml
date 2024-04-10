@@ -4,10 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5195f8cb-2b49-4971-b250-277e396c661c" name="Changes" comment="Added SQL code">
-      <change beforePath="$USER_HOME$/Desktop/COMP3005/databaseProject/SQLCode/ddl.sql" beforeDir="false" afterPath="$USER_HOME$/Desktop/COMP3005/databaseProject/SQLCode/ddl.sql" afterDir="false" />
-      <change beforePath="$USER_HOME$/Desktop/COMP3005/databaseProject/SQLCode/dml.sql" beforeDir="false" afterPath="$USER_HOME$/Desktop/COMP3005/databaseProject/SQLCode/dml.sql" afterDir="false" />
+    <list default="true" id="5195f8cb-2b49-4971-b250-277e396c661c" name="Changes" comment="Added functions to database.py">
+      <change afterPath="$USER_HOME$/Desktop/COMP3005/databaseProject/templates/member_dashboard.html" afterDir="false" />
       <change beforePath="$USER_HOME$/Desktop/COMP3005/databaseProject/database_access.py" beforeDir="false" afterPath="$USER_HOME$/Desktop/COMP3005/databaseProject/database_access.py" afterDir="false" />
+      <change beforePath="$USER_HOME$/Desktop/COMP3005/databaseProject/main.py" beforeDir="false" afterPath="$USER_HOME$/Desktop/COMP3005/databaseProject/main.py" afterDir="false" />
+      <change beforePath="$USER_HOME$/Desktop/COMP3005/databaseProject/templates/member_login.html" beforeDir="false" afterPath="$USER_HOME$/Desktop/COMP3005/databaseProject/templates/member_login.html" afterDir="false" />
+      <change beforePath="$USER_HOME$/Desktop/COMP3005/databaseProject/templates/member_profile.html" beforeDir="false" afterPath="$USER_HOME$/Desktop/COMP3005/databaseProject/templates/member_profile.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -30,9 +32,9 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 5
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 5
+}</component>
   <component name="ProjectId" id="2dvu8LaAMt8pKytOz3q1N9q9b0l" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
@@ -43,6 +45,7 @@
   "keyToString": {
     "DefaultHtmlFileTemplate": "HTML File",
     "Python.database_access.executor": "Run",
+    "Python.main.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
@@ -123,12 +126,21 @@
       <option name="project" value="LOCAL" />
       <updated>1712719128706</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Added functions to database.py">
+      <option name="closed" value="true" />
+      <created>1712723147674</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1712723147674</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Update" />
     <MESSAGE value="Added SQL code" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added SQL code" />
+    <MESSAGE value="Added functions to database.py" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added functions to database.py" />
   </component>
 </project>
