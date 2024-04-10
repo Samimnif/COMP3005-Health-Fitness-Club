@@ -104,13 +104,14 @@ def display_member_dashboard(member_id):
         print("Address:", member_data[5])
         print("Phone:", member_data[6])
         # Add more dashboard display information as needed
-        return member_data
+
     except (Exception, psycopg2.Error) as error:
         print("Error while displaying member dashboard:", error)
     finally:
         if conn:
             cursor.close()
             conn.close()
+    return member_data
 
 # Function for displaying Health Metrics for a Member
 def display_health_metrics(member_id):
