@@ -92,6 +92,16 @@ CREATE TABLE PersonalTrainingSession (
     FOREIGN KEY (TrainerID) REFERENCES Trainer(TrainerID)
 );
 
+CREATE TABLE TrainerAvailability (
+    AvailabilityID SERIAL,
+    TrainerID INT,
+    StartTime TIME,
+    EndTime TIME,
+    DayOfWeek VARCHAR(255),
+    PRIMARY KEY (AvailabilityID),
+    FOREIGN KEY (TrainerID) REFERENCES Trainer(TrainerID)
+);
+
 CREATE TABLE Billing (
     TransactionID SERIAL,
     MemberID INT,

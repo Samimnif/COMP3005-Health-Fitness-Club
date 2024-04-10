@@ -147,6 +147,42 @@ def display_health_metrics(member_id):
             cursor.close()
             conn.close()
 
+# Function for displaying Fitness Goals for a Member
+def display_fitness_goals(member_id):
+    try:
+        conn = psycopg2.connect(
+            database="COMP3005GYM",
+            user="postgres",
+            password="3005",
+            host="localhost",
+            port='5432'
+        )
+        cursor = conn.cursor()
+
+        sql = """SELECT * FROM FitnessGoals WHERE MemberID = %s"""
+        cursor.execute(sql, (member_id,))
+        fitness_goals_data = cursor.fetchall()
+        if len(fitness_goals_data) == 0:
+            print("No fitness goals found for the member.")
+        else:
+            print("Fitness Goals for MemberID", member_id)
+            for row in fitness_goals_data:
+                print("GoalID:", row[0])
+                print("Description:", row[2])
+                print("Goal Weight:", row[3])
+                print("Goal Time:", row[4])
+                print("Burned Calories:", row[5])
+                print("Total Sets:", row[6])
+                print("Total Reps:", row[7])
+                print("----------------------")
+
+    except (Exception, psycopg2.Error) as error:
+        print("Error while displaying fitness goals:", error)
+    finally:
+        if conn:
+            cursor.close()
+            conn.close()
+
 # Function for Member Schedule Management
 def schedule_training_session(member_id, trainer_id, start_time, duration):
     try:
@@ -171,8 +207,8 @@ def schedule_training_session(member_id, trainer_id, start_time, duration):
             cursor.close()
             conn.close()
 
-# Function for Trainer Schedule Management
-def set_trainer_availability(trainer_id, start_time, end_time):
+# Function for setting Trainer Availability
+def set_trainer_availability(trainer_id, availabilities):
     try:
         conn = psycopg2.connect(
             database="COMP3005GYM",
@@ -183,11 +219,19 @@ def set_trainer_availability(trainer_id, start_time, end_time):
         )
         cursor = conn.cursor()
 
-        sql = """UPDATE Trainer
-                 SET StartTime = %s, EndTime = %s
-                 WHERE TrainerID = %s"""
-        cursor.execute(sql, (start_time, end_time, trainer_id))
+        # Delete existing availability slots for the trainer
+        sql_delete = """DELETE FROM TrainerAvailability WHERE TrainerID = %s"""
+        cursor.execute(sql_delete, (trainer_id,))
         conn.commit()
+
+        # Insert new availability slots
+        for availability in availabilities:
+            start_time, end_time, day_of_week = availability
+            sql_insert = """INSERT INTO TrainerAvailability (TrainerID, StartTime, EndTime, DayOfWeek)
+                            VALUES (%s, %s, %s, %s)"""
+            cursor.execute(sql_insert, (trainer_id, start_time, end_time, day_of_week))
+            conn.commit()
+
         print("Trainer availability set successfully!")
     except (Exception, psycopg2.Error) as error:
         print("Error while setting trainer availability:", error)
@@ -294,6 +338,41 @@ def process_payment(member_id, amount, date, description):
             cursor.close()
             conn.close()
 
+# Function to display members by search name
+def display_members_by_name(search_name):
+    try:
+        conn = psycopg2.connect(
+            database="COMP3005GYM",
+            user="postgres",
+            password="3005",
+            host="localhost",
+            port='5432'
+        )
+        cursor = conn.cursor()
+
+        sql = """SELECT * FROM Member 
+                 WHERE CONCAT(FirstName, ' ', LastName) ILIKE %s"""
+        cursor.execute(sql, ('%' + search_name + '%',))
+        members_data = cursor.fetchall()
+        if len(members_data) == 0:
+            print("No members found with the given name.")
+        else:
+            print("Members with Name containing", search_name)
+            for row in members_data:
+                print("MemberID:", row[0])
+                print("Name:", row[1], row[2])
+                print("Email:", row[3])
+                print("Address:", row[5])
+                print("Phone:", row[6])
+                print("----------------------")
+
+    except (Exception, psycopg2.Error) as error:
+        print("Error while displaying members by name:", error)
+    finally:
+        if conn:
+            cursor.close()
+            conn.close()
+
 def get_member_as_json():
     try:
         conn = psycopg2.connect(
@@ -362,7 +441,7 @@ if __name__ == '__main__':
         if sel == '1':
             print("\033[4;31mMembers Options:\033[0m\n1:List All members (For Testing purposes)\n"
                   "2:Register a New Member\n3:Display Member Dashboard\n4:Update Member Information\n"
-                  "5:Display Health Metrics\n6:Display Fitness Goals\n")
+                  "5:Display Health Metrics\n6:Display Fitness Goals\n7:Exit")
             op = input('->')
             if op == '1':
                 print("Members Table")
@@ -393,12 +472,32 @@ if __name__ == '__main__':
             elif op == '5':
                 member_id = input("Please Enter Member ID:\n->")
                 display_health_metrics(member_id)
+            elif op == '6':
+                member_id = input("Please Enter Member ID:\n->")
+                display_fitness_goals(member_id)
+            elif op == '7':
+                sel = ''
+                continue
             else:
                 print('Sorry, wrong selection, please try again')
         elif sel == '2':
-            print("\033[4;34mTrainer Options:\033[0m\n1:\n2:")
+            print("\033[4;34mTrainer Options:\033[0m\n1:Schedule Management\n2:Search For a memeber")
+            op = input('->')
+            if op == '1':
+                availabilities = [
+                    ('08:00:00', '17:00:00', 'Monday'),
+                    ('09:00:00', '18:00:00', 'Tuesday'),
+                    ('10:00:00', '19:00:00', 'Wednesday'),
+                    ('11:00:00', '20:00:00', 'Thursday'),
+                    ('08:00:00', '12:00:00', 'Friday')
+                ]
+                trainer_id = input("Please Enter Trainer ID:\n->")
+                set_trainer_availability(trainer_id, availabilities)
+            elif op == '2':
+                search_name = input("Search for a member by name ")
+                display_members_by_name(search_name)
         elif sel == '3':
-            print("\033[4;35mStaff Options\033[0m\n1:\n2:")
+            print("\033[4;35mStaff Options\033[0m\n1:View Room Bookings\n2:")
         elif sel == '4':
             break
         else:

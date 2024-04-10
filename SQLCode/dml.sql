@@ -52,6 +52,20 @@ VALUES
 (1, 1, '2024-04-10 09:00:00', 60),
 (2, 2, '2024-04-12 17:00:00', 60);
 
+-- Insert sample data into the TrainerAvailability table
+INSERT INTO TrainerAvailability (TrainerID, StartTime, EndTime, DayOfWeek)
+VALUES
+(1, '08:00:00', '17:00:00', 'Monday'),
+(1, '09:00:00', '18:00:00', 'Tuesday'),
+(1, '10:00:00', '19:00:00', 'Wednesday'),
+(1, '11:00:00', '20:00:00', 'Thursday'),
+(1, '08:00:00', '12:00:00', 'Friday'),
+(2, '10:00:00', '15:00:00', 'Monday'),
+(2, '11:00:00', '16:00:00', 'Tuesday'),
+(2, '12:00:00', '17:00:00', 'Wednesday'),
+(2, '13:00:00', '18:00:00', 'Thursday'),
+(2, '14:00:00', '19:00:00', 'Friday');
+
 -- Insert sample data into the Billing table
 INSERT INTO Billing (MemberID, Amount, Date, Description)
 VALUES
