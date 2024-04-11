@@ -6,13 +6,14 @@ import datetime
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
+
 @app.template_filter('string_to_time')
 def string_to_time(value):
     parts = value.split(':')
     hour = int(parts[0])
     minute = int(parts[1].split()[0])  # Extract minutes and remove AM/PM
-    print(hour, minute)
     return datetime.time(hour, minute)
+
 
 # Function to connect to the database
 def connect_db():
@@ -258,7 +259,7 @@ def trainer_scheduler():
                 conn.close()
 
     trainer_schedule = get_trainer_availabilities(trainer_info[0])
-    print(trainer_schedule)
+
     # Assuming you have time slots and days of the week defined somewhere in your code
     # Example:
     time_slots = ['8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00',
@@ -266,8 +267,8 @@ def trainer_scheduler():
     days_of_week = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
     return render_template('trainer_scheduler.html', trainer_info=trainer_info, time_slots=time_slots,
-                           days=days_of_week,
-                           schedule=trainer_schedule)
+                           days=days_of_week, schedule=trainer_schedule)
+
 
 @app.route('/update_trainer_schedule', methods=['POST'])
 def update_trainer_schedule():
@@ -285,12 +286,9 @@ def update_trainer_schedule():
             cursor.execute(sql, (trainer_email,))
             trainer_id = cursor.fetchone()[0]
 
-            # Parse the form data for availabilities
-            availabilities = []
-            for day in ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']:
-                for slot in request.form.getlist(day):
-                    start_time, end_time = slot.split('-')
-                    availabilities.append((start_time.strip(), end_time.strip(), day))
+            # Retrieve availabilities from the form data
+            availabilities = request.form.getlist('availabilities[]')
+            print(availabilities)
 
             # Update trainer schedule in the database
             set_trainer_availability(trainer_id, availabilities)
@@ -305,14 +303,41 @@ def update_trainer_schedule():
 
     return redirect(url_for('trainer_login'))
 
+
 # Trainer search route
-@app.route('/trainer_search', methods=['GET', 'POST'])
+@app.route('/trainer_search')
 def trainer_search():
-    if request.method == 'POST':
-        # Handle member search form submission
-        # Example: Retrieve search results
-        return render_template('trainer_search_results.html', search_results=search_results)
-    return render_template('trainer_search.html')
+    # Get the list of members
+    members = list_member()  # Assuming list_members() returns the list of members
+
+    return render_template('trainer_search.html', members=members)
+
+
+@app.route('/trainer_search_result/<int:member_id>')
+def trainer_search_result(member_id):
+    if 'trainer_email' not in session:
+        return redirect(url_for('trainer_login'))
+    conn = connect_db()
+    if conn:
+        try:
+            cursor = conn.cursor()
+            # Retrieve member information based on email
+            sql = """SELECT * FROM Trainer WHERE Email = %s"""
+            cursor.execute(sql, (session['trainer_email'],))
+            trainer_id = cursor.fetchone()[0]
+
+        except (Exception, psycopg2.Error) as error:
+            print("Error while retrieving trainer information:", error)
+        finally:
+            if conn:
+                conn.close()
+    if display_member_dashboard(member_id):
+        print(get_schedule(member_id, trainer_id))
+        return render_template('trainer_search_result.html', member=display_member_dashboard(member_id),
+                               personalSessions=get_schedule(member_id, trainer_id))
+    else:
+        return "Member not found."
+    return redirect(url_for('trainer_login'))
 
 
 if __name__ == '__main__':

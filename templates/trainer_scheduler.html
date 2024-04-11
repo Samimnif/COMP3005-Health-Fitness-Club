@@ -33,21 +33,10 @@
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Classes</a>
+                    <a class="nav-link active" aria-current="page" href="/trainer_scheduler"><i class="bi bi-table"></i> Dashboard</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Pricing</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                       aria-expanded="false">
-                        Log In
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item active" href="/member_login">Members</a></li>
-                        <li><a class="dropdown-item" href="/trainer_login">Trainers</a></li>
-                        <li><a class="dropdown-item" href="#">Staff</a></li>
-                    </ul>
+                    <a class="nav-link" href="/trainer_search"><i class="bi bi-search"></i>Search Tool</a>
                 </li>
             </ul>
         </div>
@@ -81,36 +70,36 @@
         </tr>
         </thead>
         <tbody>
-            {% for slot in time_slots %}
-            <tr>
-                <td>{{ slot }}</td>
-                {% for day in days %}
-                {% set is_available = false %}
-                    {% for schedule_slot in schedule %}
-                        {% if schedule_slot[4] == day %}
-                        {% set schedule_start_time = schedule_slot[2] %}
-                        {% set schedule_end_time = schedule_slot[3] %}
-                        {% set slot_time = slot | string_to_time %}
-                            {% if slot_time >= schedule_start_time and slot_time <= schedule_end_time %}
-                            {% set is_available = true %}
-                                {% if is_available %}
-                                <td class="bg-success text-white">Available</td>
-                                {% endif %}
-                            {% endif %}
-                        {% endif %}
-                    {% endfor %}
-                {% endfor %}
-            </tr>
+        {% for slot in time_slots %}
+        <tr>
+            <td>{{ slot }}</td>
+            {% for day in days %}
+            {% set is_available = false %}
+            {% for schedule_slot in schedule %}
+            {% if schedule_slot[4] == day %}
+            {% set schedule_start_time = schedule_slot[2] %}
+            {% set schedule_end_time = schedule_slot[3] %}
+            {% set slot_time = slot | string_to_time %}
+            {% if slot_time >= schedule_start_time and slot_time <= schedule_end_time %}
+            {% set is_available = true %}
+            {% if is_available %}
+            <td class="bg-success text-white">Available</td>
+            {% endif %}
+            {% endif %}
+            {% endif %}
             {% endfor %}
+            {% endfor %}
+        </tr>
+        {% endfor %}
         </tbody>
     </table>
 
-     <!-- Button trigger modal -->
+    <!-- Button to trigger the modal -->
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#updateScheduleModal">
         Update Schedule
     </button>
 
-    <!-- Modal -->
+    <!-- Bootstrap Modal for Updating Trainer Schedule -->
     <div class="modal fade" id="updateScheduleModal" tabindex="-1" aria-labelledby="updateScheduleModalLabel"
          aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -120,7 +109,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form method="POST" action="/update_trainer_schedule">
+                    <form method="post" action="/update_trainer_schedule">
                         <table class="table table-bordered">
                             <thead class="thead-dark">
                             <tr>
@@ -138,11 +127,19 @@
                                 <td>
                                     <div class="form-check">
                                         {% set availability_id = slot ~ '-' ~ day %}
-                                        {% set checked = availability_id in trainer_schedule_ids %}
                                         <input class="form-check-input" type="checkbox" name="availabilities[]"
                                                id="{{ availability_id }}" value="{{ availability_id }}"
-                                               {% if checked %} checked {% endif %}>
+                                               {% for schedule_slot in schedule %}
+                                               {% set slot_time = slot | string_to_time %}
+                                               {% if schedule_slot[4]== day %}
+                                               {% if slot_time == schedule_slot[2] or slot_time == schedule_slot[3]%}
+                                               checked
+                                               {% endif %}
+                                               {% endif %}
+                                               {% endfor %}>
                                         <label class="form-check-label" for="{{ availability_id }}"></label>
+
+
                                     </div>
                                 </td>
                                 {% endfor %}
@@ -150,7 +147,7 @@
                             {% endfor %}
                             </tbody>
                         </table>
-                        <button type="submit" class="btn btn-primary">Update Schedule</button>
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
                     </form>
                 </div>
             </div>

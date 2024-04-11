@@ -47,10 +47,10 @@ VALUES
 ('Strength Training', 1, 2, '18:00:00', 60, 'Wednesday');
 
 -- Insert sample data into the PersonalTrainingSession table
-INSERT INTO PersonalTrainingSession (MemberID, TrainerID, StartTime, Duration)
+INSERT INTO PersonalTrainingSession (MemberID, TrainerID, StartTime, DayOfWeek, Duration)
 VALUES
-(1, 1, '2024-04-10 09:00:00', 60),
-(2, 2, '2024-04-12 17:00:00', 60);
+(1, 1, '09:00:00', 'Monday', 60),
+(2, 2, '17:00:00', 'Friday', 60);
 
 -- Insert sample data into the TrainerAvailability table
 INSERT INTO TrainerAvailability (TrainerID, StartTime, EndTime, DayOfWeek)

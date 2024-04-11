@@ -260,6 +260,35 @@ def schedule_training_session(member_id, trainer_id, start_time, duration):
             cursor.close()
             conn.close()
 
+def get_schedule(member_id, trainer_id):
+    try:
+        conn = psycopg2.connect(
+            database="COMP3005GYM",
+            user="postgres",
+            password="3005",
+            host="localhost",
+            port='5432'
+        )
+        cursor = conn.cursor()
+
+        sql = """SELECT * FROM PersonalTrainingSession 
+                 WHERE MemberID = %s AND TrainerID = %s"""
+        cursor.execute(sql, (member_id, trainer_id))
+        sessions = cursor.fetchall()
+
+        print("Training sessions retrieved successfully!")
+        return sessions
+
+    except (Exception, psycopg2.Error) as error:
+        print("Error while retrieving training sessions:", error)
+        return None
+
+    finally:
+        if conn:
+            cursor.close()
+            conn.close()
+
+
 # Function for setting Trainer Availability
 def set_trainer_availability(trainer_id, availabilities):
     try:

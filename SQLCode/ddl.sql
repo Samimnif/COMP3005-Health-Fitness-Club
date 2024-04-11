@@ -86,6 +86,7 @@ CREATE TABLE PersonalTrainingSession (
     MemberID INT,
     TrainerID INT,
     StartTime TIME,
+    DayOfWeek VARCHAR(255),
     Duration INT,
   	PRIMARY KEY (SessionID),
     FOREIGN KEY (MemberID) REFERENCES Member(MemberID),
