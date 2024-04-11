@@ -186,6 +186,56 @@ def display_fitness_goals(member_id):
             conn.close()
     return fitness_goals_data
 
+# Function for inserting a fitness goal into the database
+def insert_fitness_goal(member_id, description, goal_weight, goal_time, burned_calories, total_sets, total_reps):
+    try:
+        conn = psycopg2.connect(
+            database="COMP3005GYM",
+            user="postgres",
+            password="3005",
+            host="localhost",
+            port='5432'
+        )
+        cursor = conn.cursor()
+
+        sql = """INSERT INTO FitnessGoals (MemberID, Description, GoalWeight, GoalTime, BurnedCalories, TotalSets, TotalReps)
+                 VALUES (%s, %s, %s, %s, %s, %s, %s)"""
+        cursor.execute(sql, (member_id, description, goal_weight, goal_time, burned_calories, total_sets, total_reps))
+        conn.commit()
+        print("Fitness goal inserted successfully.")
+
+    except (Exception, psycopg2.Error) as error:
+        print("Error while inserting fitness goal:", error)
+    finally:
+        if conn:
+            cursor.close()
+            conn.close()
+
+# Function for inserting a health metric into the database
+def insert_health_metric(member_id, height, weight, muscle_mass, bpm, data_date):
+    try:
+        conn = psycopg2.connect(
+            database="COMP3005GYM",
+            user="postgres",
+            password="3005",
+            host="localhost",
+            port='5432'
+        )
+        cursor = conn.cursor()
+
+        sql = """INSERT INTO HealthMetrics (MemberID, Height, Weight, MuscleMass, BPM, DataDate)
+                 VALUES (%s, %s, %s, %s, %s, %s)"""
+        cursor.execute(sql, (member_id, height, weight, muscle_mass, bpm, data_date))
+        conn.commit()
+        print("Health metric inserted successfully.")
+
+    except (Exception, psycopg2.Error) as error:
+        print("Error while inserting health metric:", error)
+    finally:
+        if conn:
+            cursor.close()
+            conn.close()
+
 # Function for Member Schedule Management
 def schedule_training_session(member_id, trainer_id, start_time, duration):
     try:
@@ -242,6 +292,50 @@ def set_trainer_availability(trainer_id, availabilities):
         if conn:
             cursor.close()
             conn.close()
+
+# Function for retrieving trainer information by ID
+def get_trainer_info(trainer_id):
+    conn = psycopg2.connect(
+        database="COMP3005GYM",
+        user="postgres",
+        password="3005",
+        host="localhost",
+        port='5432'
+    )
+    if conn:
+        try:
+            cursor = conn.cursor()
+            sql = """SELECT * FROM Trainer WHERE TrainerID = %s"""
+            cursor.execute(sql, (trainer_id,))
+            trainer_info = cursor.fetchone()
+            return trainer_info
+        except psycopg2.Error as e:
+            print("Error retrieving trainer information:", e)
+        finally:
+            if conn:
+                conn.close()
+
+# Function for retrieving trainer availabilities by ID
+def get_trainer_availabilities(trainer_id):
+    conn = psycopg2.connect(
+        database="COMP3005GYM",
+        user="postgres",
+        password="3005",
+        host="localhost",
+        port='5432'
+    )
+    if conn:
+        try:
+            cursor = conn.cursor()
+            sql = """SELECT * FROM TrainerAvailability WHERE TrainerID = %s"""
+            cursor.execute(sql, (trainer_id,))
+            availabilities = cursor.fetchall()
+            return availabilities
+        except psycopg2.Error as e:
+            print("Error retrieving trainer availabilities:", e)
+        finally:
+            if conn:
+                conn.close()
 
 # Function for Administrative Staff Room Booking Management
 def book_room(room_name, capacity):
