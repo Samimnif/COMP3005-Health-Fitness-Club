@@ -4,17 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5195f8cb-2b49-4971-b250-277e396c661c" name="Changes" comment="added lots of features to webserver regarding member functions">
-      <change afterPath="$USER_HOME$/Desktop/COMP3005/databaseProject/templates/member_register.html" afterDir="false" />
-      <change afterPath="$USER_HOME$/Desktop/COMP3005/databaseProject/templates/trainer_login.html" afterDir="false" />
-      <change afterPath="$USER_HOME$/Desktop/COMP3005/databaseProject/templates/trainer_scheduler.html" afterDir="false" />
-      <change afterPath="$USER_HOME$/Desktop/COMP3005/databaseProject/templates/trainer_search.html" afterDir="false" />
-      <change afterPath="$USER_HOME$/Desktop/COMP3005/databaseProject/templates/trainer_search_results.html" afterDir="false" />
+    <list default="true" id="5195f8cb-2b49-4971-b250-277e396c661c" name="Changes" comment="added trainer templates and functions">
+      <change afterPath="$USER_HOME$/Desktop/COMP3005/databaseProject/templates/trainer_search_result.html" afterDir="false" />
+      <change beforePath="$USER_HOME$/Desktop/COMP3005/databaseProject/SQLCode/ddl.sql" beforeDir="false" afterPath="$USER_HOME$/Desktop/COMP3005/databaseProject/SQLCode/ddl.sql" afterDir="false" />
+      <change beforePath="$USER_HOME$/Desktop/COMP3005/databaseProject/SQLCode/dml.sql" beforeDir="false" afterPath="$USER_HOME$/Desktop/COMP3005/databaseProject/SQLCode/dml.sql" afterDir="false" />
       <change beforePath="$USER_HOME$/Desktop/COMP3005/databaseProject/database_access.py" beforeDir="false" afterPath="$USER_HOME$/Desktop/COMP3005/databaseProject/database_access.py" afterDir="false" />
       <change beforePath="$USER_HOME$/Desktop/COMP3005/databaseProject/main.py" beforeDir="false" afterPath="$USER_HOME$/Desktop/COMP3005/databaseProject/main.py" afterDir="false" />
-      <change beforePath="$USER_HOME$/Desktop/COMP3005/databaseProject/templates/home.html" beforeDir="false" afterPath="$USER_HOME$/Desktop/COMP3005/databaseProject/templates/home.html" afterDir="false" />
-      <change beforePath="$USER_HOME$/Desktop/COMP3005/databaseProject/templates/member_dashboard.html" beforeDir="false" afterPath="$USER_HOME$/Desktop/COMP3005/databaseProject/templates/member_dashboard.html" afterDir="false" />
-      <change beforePath="$USER_HOME$/Desktop/COMP3005/databaseProject/templates/member_profile.html" beforeDir="false" afterPath="$USER_HOME$/Desktop/COMP3005/databaseProject/templates/member_profile.html" afterDir="false" />
+      <change beforePath="$USER_HOME$/Desktop/COMP3005/databaseProject/templates/trainer_scheduler.html" beforeDir="false" afterPath="$USER_HOME$/Desktop/COMP3005/databaseProject/templates/trainer_scheduler.html" afterDir="false" />
+      <change beforePath="$USER_HOME$/Desktop/COMP3005/databaseProject/templates/trainer_search.html" beforeDir="false" afterPath="$USER_HOME$/Desktop/COMP3005/databaseProject/templates/trainer_search.html" afterDir="false" />
+      <change beforePath="$USER_HOME$/Desktop/COMP3005/databaseProject/templates/trainer_search_results.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -163,7 +161,15 @@
       <option name="project" value="LOCAL" />
       <updated>1712804160841</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="added trainer templates and functions">
+      <option name="closed" value="true" />
+      <created>1712813201327</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1712813201327</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -173,6 +179,7 @@
     <MESSAGE value="front end" />
     <MESSAGE value="added some functions to flask webserver" />
     <MESSAGE value="added lots of features to webserver regarding member functions" />
-    <option name="LAST_COMMIT_MESSAGE" value="added lots of features to webserver regarding member functions" />
+    <MESSAGE value="added trainer templates and functions" />
+    <option name="LAST_COMMIT_MESSAGE" value="added trainer templates and functions" />
   </component>
 </project>
