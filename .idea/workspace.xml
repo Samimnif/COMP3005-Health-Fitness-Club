@@ -4,25 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5195f8cb-2b49-4971-b250-277e396c661c" name="Changes" comment="added trainer templates and functions">
-      <change afterPath="$USER_HOME$/Desktop/COMP3005/databaseProject/static/payements/discover.svg" afterDir="false" />
-      <change afterPath="$USER_HOME$/Desktop/COMP3005/databaseProject/static/payements/mastercard.svg" afterDir="false" />
-      <change afterPath="$USER_HOME$/Desktop/COMP3005/databaseProject/static/payements/paypal.svg" afterDir="false" />
-      <change afterPath="$USER_HOME$/Desktop/COMP3005/databaseProject/static/payements/visa.svg" afterDir="false" />
-      <change afterPath="$USER_HOME$/Desktop/COMP3005/databaseProject/templates/billing.html" afterDir="false" />
-      <change afterPath="$USER_HOME$/Desktop/COMP3005/databaseProject/templates/class_scheduler.html" afterDir="false" />
-      <change afterPath="$USER_HOME$/Desktop/COMP3005/databaseProject/templates/equipment_view_maintenance.html" afterDir="false" />
-      <change afterPath="$USER_HOME$/Desktop/COMP3005/databaseProject/templates/room_booking.html" afterDir="false" />
-      <change afterPath="$USER_HOME$/Desktop/COMP3005/databaseProject/templates/staff_dashboard.html" afterDir="false" />
-      <change afterPath="$USER_HOME$/Desktop/COMP3005/databaseProject/templates/staff_login.html" afterDir="false" />
-      <change beforePath="$USER_HOME$/Desktop/COMP3005/databaseProject/SQLCode/ddl.sql" beforeDir="false" afterPath="$USER_HOME$/Desktop/COMP3005/databaseProject/SQLCode/ddl.sql" afterDir="false" />
-      <change beforePath="$USER_HOME$/Desktop/COMP3005/databaseProject/SQLCode/dml.sql" beforeDir="false" afterPath="$USER_HOME$/Desktop/COMP3005/databaseProject/SQLCode/dml.sql" afterDir="false" />
+    <list default="true" id="5195f8cb-2b49-4971-b250-277e396c661c" name="Changes" comment="added staff templates and functions">
       <change beforePath="$USER_HOME$/Desktop/COMP3005/databaseProject/database_access.py" beforeDir="false" afterPath="$USER_HOME$/Desktop/COMP3005/databaseProject/database_access.py" afterDir="false" />
       <change beforePath="$USER_HOME$/Desktop/COMP3005/databaseProject/main.py" beforeDir="false" afterPath="$USER_HOME$/Desktop/COMP3005/databaseProject/main.py" afterDir="false" />
-      <change beforePath="$USER_HOME$/Desktop/COMP3005/databaseProject/templates/home.html" beforeDir="false" afterPath="$USER_HOME$/Desktop/COMP3005/databaseProject/templates/home.html" afterDir="false" />
       <change beforePath="$USER_HOME$/Desktop/COMP3005/databaseProject/templates/member_dashboard.html" beforeDir="false" afterPath="$USER_HOME$/Desktop/COMP3005/databaseProject/templates/member_dashboard.html" afterDir="false" />
-      <change beforePath="$USER_HOME$/Desktop/COMP3005/databaseProject/templates/member_login.html" beforeDir="false" afterPath="$USER_HOME$/Desktop/COMP3005/databaseProject/templates/member_login.html" afterDir="false" />
-      <change beforePath="$USER_HOME$/Desktop/COMP3005/databaseProject/templates/trainer_login.html" beforeDir="false" afterPath="$USER_HOME$/Desktop/COMP3005/databaseProject/templates/trainer_login.html" afterDir="false" />
+      <change beforePath="$USER_HOME$/Desktop/COMP3005/databaseProject/templates/room_booking.html" beforeDir="false" afterPath="$USER_HOME$/Desktop/COMP3005/databaseProject/templates/member_classes.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -188,7 +174,15 @@
       <option name="project" value="LOCAL" />
       <updated>1712844927857</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="added staff templates and functions">
+      <option name="closed" value="true" />
+      <created>1712859995382</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1712859995382</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -199,6 +193,7 @@
     <MESSAGE value="added some functions to flask webserver" />
     <MESSAGE value="added lots of features to webserver regarding member functions" />
     <MESSAGE value="added trainer templates and functions" />
-    <option name="LAST_COMMIT_MESSAGE" value="added trainer templates and functions" />
+    <MESSAGE value="added staff templates and functions" />
+    <option name="LAST_COMMIT_MESSAGE" value="added staff templates and functions" />
   </component>
 </project>
