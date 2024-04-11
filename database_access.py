@@ -288,6 +288,69 @@ def get_schedule(member_id, trainer_id):
             cursor.close()
             conn.close()
 
+def get_member_personal_session(member_id):
+    try:
+        conn = psycopg2.connect(
+            database="COMP3005GYM",
+            user="postgres",
+            password="3005",
+            host="localhost",
+            port='5432'
+        )
+        cursor = conn.cursor()
+
+        sql = """SELECT pts.*, t.firstname, t.lastname 
+                 FROM PersonalTrainingSession pts
+                 INNER JOIN Trainer t ON pts.TrainerID = t.TrainerID
+                 WHERE pts.MemberID = %s"""
+        cursor.execute(sql, (member_id,))
+        sessions = cursor.fetchall()
+
+        print(sessions)
+        print("Personal training sessions retrieved successfully!")
+        return sessions
+
+    except (Exception, psycopg2.Error) as error:
+        print("Error while retrieving personal training sessions:", error)
+        return None
+
+    finally:
+        if conn:
+            cursor.close()
+            conn.close()
+
+def get_class_registration(member_id):
+    try:
+        conn = psycopg2.connect(
+            database="COMP3005GYM",
+            user="postgres",
+            password="3005",
+            host="localhost",
+            port='5432'
+        )
+        cursor = conn.cursor()
+
+        sql = """SELECT c.*, cr.dateregistration, t.firstname, t.lastname 
+                         FROM ClassSchedule c
+                         INNER JOIN ClassRegistration cr ON c.ClassID = cr.ClassID
+                         INNER JOIN Trainer t ON c.TrainerID = t.TrainerID
+                         WHERE cr.MemberID = %s"""
+        cursor.execute(sql, (member_id,))
+        classes = cursor.fetchall()
+        print(classes)
+
+        print("Class registrations retrieved successfully!")
+        return classes
+
+    except (Exception, psycopg2.Error) as error:
+        print("Error while retrieving class registrations:", error)
+        return None
+
+    finally:
+        if conn:
+            cursor.close()
+            conn.close()
+
 
 # Function for setting Trainer Availability
 def set_trainer_availability(trainer_id, availabilities):
@@ -366,8 +429,74 @@ def get_trainer_availabilities(trainer_id):
             if conn:
                 conn.close()
 
+def register_for_class(member_id, class_id):
+    try:
+        conn = psycopg2.connect(
+            database="COMP3005GYM",
+            user="postgres",
+            password="3005",
+            host="localhost",
+            port='5432'
+        )
+        cursor = conn.cursor()
+
+        # Check if the member is already registered for the class
+        sql_check = "SELECT * FROM ClassRegistration WHERE MemberID = %s AND ClassID = %s"
+        cursor.execute(sql_check, (member_id, class_id))
+        existing_registration = cursor.fetchone()
+
+        if existing_registration:
+            print("Member is already registered for this class.")
+            return False
+
+        # Insert new registration
+        sql_insert = "INSERT INTO ClassRegistration (MemberID, ClassID, DateRegistration) VALUES (%s, %s, CURRENT_DATE)"
+        cursor.execute(sql_insert, (member_id, class_id))
+        conn.commit()
+
+        print("Registration for class successfully.")
+        return True
+
+    except (Exception, psycopg2.Error) as error:
+        print("Error registering for class:", error)
+        return False
+
+    finally:
+        if conn:
+            cursor.close()
+            conn.close()
+
+
+def register_for_personal_session(member_id, trainer_id, time, day, duration):
+    try:
+        conn = psycopg2.connect(
+            database="COMP3005GYM",
+            user="postgres",
+            password="3005",
+            host="localhost",
+            port='5432'
+        )
+        cursor = conn.cursor()
+
+        # Insert new personal session
+        sql_insert = "INSERT INTO PersonalTrainingSession (MemberID, TrainerID, starttime, dayofweek, duration) VALUES (%s, %s, %s, %s, %s)"
+        cursor.execute(sql_insert, (member_id, trainer_id, time, day, duration))
+        conn.commit()
+
+        print("Personal session booked successfully.")
+        return True
+
+    except (Exception, psycopg2.Error) as error:
+        print("Error booking personal session:", error)
+        return False
+
+    finally:
+        if conn:
+            cursor.close()
+            conn.close()
+
 # Function for Administrative Staff Room Booking Management
-def book_room(room_name, capacity):
+def create_room(room_name, capacity):
     try:
         conn = psycopg2.connect(
             database="COMP3005GYM",
@@ -382,9 +511,9 @@ def book_room(room_name, capacity):
                  VALUES (%s, %s)"""
         cursor.execute(sql, (room_name, capacity))
         conn.commit()
-        print("Room booked successfully!")
+        print("Room created successfully!")
     except (Exception, psycopg2.Error) as error:
-        print("Error while booking room:", error)
+        print("Error while creating room:", error)
     finally:
         if conn:
             cursor.close()

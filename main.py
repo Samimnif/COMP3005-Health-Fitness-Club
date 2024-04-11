@@ -1,7 +1,7 @@
 import psycopg2
 from flask import Flask, render_template, request, redirect, url_for, session
 from database_access import *
-import datetime
+from datetime import datetime, time
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
@@ -12,7 +12,7 @@ def string_to_time(value):
     parts = value.split(':')
     hour = int(parts[0])
     minute = int(parts[1].split()[0])  # Extract minutes and remove AM/PM
-    return datetime.time(hour, minute)
+    return time(hour, minute)
 
 
 # Function to connect to the database
@@ -141,7 +141,6 @@ def member_profile():
         sql = """SELECT * FROM Member WHERE Email = %s"""
         cursor.execute(sql, (session['member_email'],))
         member_info = cursor.fetchone()
-        print(member_info)
 
 
     except (Exception, psycopg2.Error) as error:
@@ -204,6 +203,72 @@ def add_fitness_goal():
 
         insert_fitness_goal(member_id, description, goal_weight, goal_time, burned_calories, total_sets, total_reps)
         return redirect(url_for('member_dashboard'))
+
+
+@app.route('/member_classes')
+def member_classes():
+    conn = connect_db()
+    days_of_week = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+    try:
+        cursor = conn.cursor()
+        # Retrieve member information based on email
+        sql = """SELECT * FROM Member WHERE Email = %s"""
+        cursor.execute(sql, (session['member_email'],))
+        member_info = cursor.fetchone()
+
+    except Exception as e:
+        print("Error while accessing member info at classes", e)
+
+    return render_template('member_classes.html', signed_up_classes=get_class_registration(member_info[0]),
+                           personal_training_sessions=get_member_personal_session(member_info[0]),
+                           classes=get_classes(), trainers=get_trainers(), member_info=member_info,
+                           days_of_week=days_of_week)
+
+
+@app.route('/register_class', methods=['POST'])
+def register_class():
+    if request.method == 'POST':
+        # Extract the form data
+        member_id = request.form.get('member_id')
+        class_id = request.form.get('class_id')
+
+        print(member_id, "class_id:", class_id)
+        register_for_class(member_id, class_id)
+        # Add your code here to handle the registration for the class
+        # This could involve inserting the registration details into a database
+
+        return "Class registration successful!"
+
+
+@app.route('/register_personal_session', methods=['POST'])
+def register_personal_session():
+    if request.method == 'POST':
+        # Extract the form data
+        member_id = request.form.get('member_id')
+        trainer_id = request.form.get('trainer_id')
+        requested_day = request.form.get('session_day')  # Assuming this is a string like "Monday"
+        requested_time = request.form.get('session_time')  # Assuming this is a string like "09:30"session_duration
+        requested_duration = request.form.get('session_duration')
+
+        trainers_info = get_trainer_availabilities(trainer_id)
+
+        # Convert requested_time to a time object
+        requested_time_obj = datetime.strptime(requested_time, '%H:%M').time()
+
+        # Check if the requested day and time fall within any of the available slots
+        for slot in trainers_info:
+            if requested_day.lower() == slot[4].lower():  # Check if the requested day matches the available slot day
+                if slot[2] <= requested_time_obj <= slot[
+                    3]:  # Check if the requested time falls within the available slot time range
+                    # If the requested day and time fall within an available slot, proceed with registration
+                    register_for_personal_session(member_id, trainer_id, requested_time, requested_day, requested_duration)
+                    return "Personal session registration successful!"
+
+        # If no available slot matches the requested day and time, return an error message
+        return "Requested day and time are not available for the selected trainer."
+
+    # Handle cases where the request method is not POST
+    return "Invalid request method"
 
 
 # Trainer login route
@@ -367,7 +432,7 @@ def room_booking():
     if 'staff_username' not in session:
         return redirect(url_for('staff_login'))
     # Add your room booking logic here
-    return render_template('room_booking.html')
+    return render_template('member_classes.html')
 
 
 # Add the following route to the Flask app
@@ -462,6 +527,7 @@ def billing():
         billings = get_billings()  # Function to retrieve billing data from the database
         return render_template('billing.html', billings=billings)
 
+
 @app.route('/pay_payment', methods=['POST'])
 def process_payment_route():
     if request.method == 'POST':
@@ -481,6 +547,7 @@ def process_payment_route():
         pay_payment(transaction_id)
 
     return redirect(url_for('member_dashboard'))
+
 
 if __name__ == '__main__':
     app.run(debug=True)
