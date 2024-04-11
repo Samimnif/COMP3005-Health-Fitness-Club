@@ -5,14 +5,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5195f8cb-2b49-4971-b250-277e396c661c" name="Changes" comment="added trainer templates and functions">
-      <change afterPath="$USER_HOME$/Desktop/COMP3005/databaseProject/templates/trainer_search_result.html" afterDir="false" />
+      <change afterPath="$USER_HOME$/Desktop/COMP3005/databaseProject/static/payements/discover.svg" afterDir="false" />
+      <change afterPath="$USER_HOME$/Desktop/COMP3005/databaseProject/static/payements/mastercard.svg" afterDir="false" />
+      <change afterPath="$USER_HOME$/Desktop/COMP3005/databaseProject/static/payements/paypal.svg" afterDir="false" />
+      <change afterPath="$USER_HOME$/Desktop/COMP3005/databaseProject/static/payements/visa.svg" afterDir="false" />
+      <change afterPath="$USER_HOME$/Desktop/COMP3005/databaseProject/templates/billing.html" afterDir="false" />
+      <change afterPath="$USER_HOME$/Desktop/COMP3005/databaseProject/templates/class_scheduler.html" afterDir="false" />
+      <change afterPath="$USER_HOME$/Desktop/COMP3005/databaseProject/templates/equipment_view_maintenance.html" afterDir="false" />
+      <change afterPath="$USER_HOME$/Desktop/COMP3005/databaseProject/templates/room_booking.html" afterDir="false" />
+      <change afterPath="$USER_HOME$/Desktop/COMP3005/databaseProject/templates/staff_dashboard.html" afterDir="false" />
+      <change afterPath="$USER_HOME$/Desktop/COMP3005/databaseProject/templates/staff_login.html" afterDir="false" />
       <change beforePath="$USER_HOME$/Desktop/COMP3005/databaseProject/SQLCode/ddl.sql" beforeDir="false" afterPath="$USER_HOME$/Desktop/COMP3005/databaseProject/SQLCode/ddl.sql" afterDir="false" />
       <change beforePath="$USER_HOME$/Desktop/COMP3005/databaseProject/SQLCode/dml.sql" beforeDir="false" afterPath="$USER_HOME$/Desktop/COMP3005/databaseProject/SQLCode/dml.sql" afterDir="false" />
       <change beforePath="$USER_HOME$/Desktop/COMP3005/databaseProject/database_access.py" beforeDir="false" afterPath="$USER_HOME$/Desktop/COMP3005/databaseProject/database_access.py" afterDir="false" />
       <change beforePath="$USER_HOME$/Desktop/COMP3005/databaseProject/main.py" beforeDir="false" afterPath="$USER_HOME$/Desktop/COMP3005/databaseProject/main.py" afterDir="false" />
-      <change beforePath="$USER_HOME$/Desktop/COMP3005/databaseProject/templates/trainer_scheduler.html" beforeDir="false" afterPath="$USER_HOME$/Desktop/COMP3005/databaseProject/templates/trainer_scheduler.html" afterDir="false" />
-      <change beforePath="$USER_HOME$/Desktop/COMP3005/databaseProject/templates/trainer_search.html" beforeDir="false" afterPath="$USER_HOME$/Desktop/COMP3005/databaseProject/templates/trainer_search.html" afterDir="false" />
-      <change beforePath="$USER_HOME$/Desktop/COMP3005/databaseProject/templates/trainer_search_results.html" beforeDir="false" />
+      <change beforePath="$USER_HOME$/Desktop/COMP3005/databaseProject/templates/home.html" beforeDir="false" afterPath="$USER_HOME$/Desktop/COMP3005/databaseProject/templates/home.html" afterDir="false" />
+      <change beforePath="$USER_HOME$/Desktop/COMP3005/databaseProject/templates/member_dashboard.html" beforeDir="false" afterPath="$USER_HOME$/Desktop/COMP3005/databaseProject/templates/member_dashboard.html" afterDir="false" />
+      <change beforePath="$USER_HOME$/Desktop/COMP3005/databaseProject/templates/member_login.html" beforeDir="false" afterPath="$USER_HOME$/Desktop/COMP3005/databaseProject/templates/member_login.html" afterDir="false" />
+      <change beforePath="$USER_HOME$/Desktop/COMP3005/databaseProject/templates/trainer_login.html" beforeDir="false" afterPath="$USER_HOME$/Desktop/COMP3005/databaseProject/templates/trainer_login.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -44,20 +54,21 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
-    &quot;Python.database_access.executor&quot;: &quot;Run&quot;,
-    &quot;Python.main.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/samim/Desktop/COMP3005&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "DefaultHtmlFileTemplate": "HTML File",
+    "Python.database_access.executor": "Run",
+    "Python.main.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "C:/Users/samim/Desktop/COMP3005/databaseProject/static/payements"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\samim\Desktop\COMP3005\databaseProject\static\payements" />
       <recent name="C:\Users\samim\PycharmProjects\databaseProject\static" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
@@ -169,7 +180,15 @@
       <option name="project" value="LOCAL" />
       <updated>1712813201327</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="added trainer templates and functions">
+      <option name="closed" value="true" />
+      <created>1712844927857</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1712844927857</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
