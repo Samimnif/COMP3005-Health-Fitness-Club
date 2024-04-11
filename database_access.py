@@ -2,12 +2,13 @@ import psycopg2
 import json
 
 con = psycopg2.connect(
-        database="COMP3005GYM",
-        user="postgres",
-        password="3005",
-        host="localhost",
-        port='5432'
-    )
+    database="COMP3005GYM",
+    user="postgres",
+    password="3005",
+    host="localhost",
+    port='5432'
+)
+
 
 # Function for Member Registration
 def register_member(first_name, last_name, email, password, address, phone):
@@ -33,6 +34,7 @@ def register_member(first_name, last_name, email, password, address, phone):
             cursor.close()
             conn.close()
 
+
 # Getter Function for Member
 def list_member():
     try:
@@ -56,6 +58,7 @@ def list_member():
         if conn:
             cursor.close()
             conn.close()
+
 
 # Function for Member Profile Management
 def update_member_profile(member_id, first_name, last_name, email, password, address, phone):
@@ -81,6 +84,7 @@ def update_member_profile(member_id, first_name, last_name, email, password, add
         if conn:
             cursor.close()
             conn.close()
+
 
 # Function for Member Dashboard Display
 def display_member_dashboard(member_id):
@@ -112,6 +116,7 @@ def display_member_dashboard(member_id):
             cursor.close()
             conn.close()
     return member_data
+
 
 # Function for displaying Health Metrics for a Member
 def display_health_metrics(member_id):
@@ -148,6 +153,7 @@ def display_health_metrics(member_id):
             cursor.close()
             conn.close()
     return health_metrics_data
+
 
 # Function for displaying Fitness Goals for a Member
 def display_fitness_goals(member_id):
@@ -186,6 +192,7 @@ def display_fitness_goals(member_id):
             conn.close()
     return fitness_goals_data
 
+
 # Function for inserting a fitness goal into the database
 def insert_fitness_goal(member_id, description, goal_weight, goal_time, burned_calories, total_sets, total_reps):
     try:
@@ -210,6 +217,7 @@ def insert_fitness_goal(member_id, description, goal_weight, goal_time, burned_c
         if conn:
             cursor.close()
             conn.close()
+
 
 # Function for inserting a health metric into the database
 def insert_health_metric(member_id, height, weight, muscle_mass, bpm, data_date):
@@ -236,6 +244,7 @@ def insert_health_metric(member_id, height, weight, muscle_mass, bpm, data_date)
             cursor.close()
             conn.close()
 
+
 # Function for Member Schedule Management
 def schedule_training_session(member_id, trainer_id, start_time, duration):
     try:
@@ -259,6 +268,7 @@ def schedule_training_session(member_id, trainer_id, start_time, duration):
         if conn:
             cursor.close()
             conn.close()
+
 
 def get_schedule(member_id, trainer_id):
     try:
@@ -287,6 +297,7 @@ def get_schedule(member_id, trainer_id):
         if conn:
             cursor.close()
             conn.close()
+
 
 def get_member_personal_session(member_id):
     try:
@@ -318,6 +329,7 @@ def get_member_personal_session(member_id):
         if conn:
             cursor.close()
             conn.close()
+
 
 def get_class_registration(member_id):
     try:
@@ -385,6 +397,7 @@ def set_trainer_availability(trainer_id, availabilities):
             cursor.close()
             conn.close()
 
+
 # Function for retrieving trainer information by ID
 def get_trainer_info(trainer_id):
     conn = psycopg2.connect(
@@ -407,6 +420,7 @@ def get_trainer_info(trainer_id):
             if conn:
                 conn.close()
 
+
 # Function for retrieving trainer availabilities by ID
 def get_trainer_availabilities(trainer_id):
     conn = psycopg2.connect(
@@ -428,6 +442,7 @@ def get_trainer_availabilities(trainer_id):
         finally:
             if conn:
                 conn.close()
+
 
 def register_for_class(member_id, class_id):
     try:
@@ -495,6 +510,7 @@ def register_for_personal_session(member_id, trainer_id, time, day, duration):
             cursor.close()
             conn.close()
 
+
 # Function for Administrative Staff Room Booking Management
 def create_room(room_name, capacity):
     try:
@@ -518,6 +534,7 @@ def create_room(room_name, capacity):
         if conn:
             cursor.close()
             conn.close()
+
 
 # Function for Administrative Staff Room Booking Management
 def get_rooms():
@@ -569,6 +586,7 @@ def get_trainers():
             cursor.close()
             conn.close()
 
+
 def get_billings():
     try:
         conn = psycopg2.connect(
@@ -592,6 +610,7 @@ def get_billings():
         if conn:
             cursor.close()
             conn.close()
+
 
 def get_member_billing(member_id):
     try:
@@ -644,6 +663,7 @@ def update_equipment_maintenance(equipment_id, last_maintenance_date, next_maint
             cursor.close()
             conn.close()
 
+
 # Function to add a new equipment
 def add_equipment(name, last_maintenance_date, next_maintenance_date):
     try:
@@ -666,6 +686,7 @@ def add_equipment(name, last_maintenance_date, next_maintenance_date):
         if conn:
             conn.close()
 
+
 def get_equipments():
     """Retrieve all equipment from the database."""
     try:
@@ -686,6 +707,7 @@ def get_equipments():
     finally:
         if conn:
             conn.close()
+
 
 def get_classes():
     """Retrieve all class schedules from the database with trainer and room details."""
@@ -712,6 +734,7 @@ def get_classes():
         if conn:
             conn.close()
 
+
 # Function to add a new class to the database
 def add_class(class_name, trainer_id, room_id, start_time, duration, day_of_week):
     conn = psycopg2.connect(
@@ -735,6 +758,7 @@ def add_class(class_name, trainer_id, room_id, start_time, duration, day_of_week
             if conn:
                 conn.close()
 
+
 def delete_class(class_id):
     """Delete a class from the database."""
     try:
@@ -756,6 +780,7 @@ def delete_class(class_id):
     finally:
         if conn:
             conn.close()
+
 
 # Function for Administrative Staff Class Schedule Updating
 def update_class_schedule(class_id, class_name, trainer_id, room_id, start_time, duration, day_of_week):
@@ -782,6 +807,7 @@ def update_class_schedule(class_id, class_name, trainer_id, room_id, start_time,
             cursor.close()
             conn.close()
 
+
 # Function for Administrative Staff Billing and Payment Processing
 def process_payment(member_id, amount, date, description):
     try:
@@ -805,6 +831,7 @@ def process_payment(member_id, amount, date, description):
         if conn:
             cursor.close()
             conn.close()
+
 
 def pay_payment(transaction_id):
     try:
@@ -830,6 +857,7 @@ def pay_payment(transaction_id):
         if conn:
             cursor.close()
             conn.close()
+
 
 # Function to display members by search name
 def display_members_by_name(search_name):
@@ -866,6 +894,7 @@ def display_members_by_name(search_name):
             cursor.close()
             conn.close()
 
+
 def get_staff_info(staff_id):
     try:
         conn = psycopg2.connect(
@@ -887,6 +916,28 @@ def get_staff_info(staff_id):
         if conn:
             conn.close()
 
+def register_staff(firstname, lastname, email, password):
+    try:
+        conn = psycopg2.connect(
+            database="COMP3005GYM",
+            user="postgres",
+            password="3005",
+            host="localhost",
+            port='5432'
+        )
+        cursor = conn.cursor()
+        sql = """INSERT INTO administrativestaff (FirstName, LastName, Email, Password) 
+                 VALUES (%s, %s, %s, %s)"""
+        cursor.execute(sql, (firstname, lastname, email, password))
+        conn.commit()
+        print("Staff registered successfully!")
+    except psycopg2.Error as e:
+        print("Error registering staff:", e)
+    finally:
+        if conn:
+            conn.close()
+
+
 # Print Tables
 def format_table(data):
     if not data:
@@ -905,6 +956,7 @@ def format_table(data):
             print(str(value).ljust(max_length + 2), end='')
         print()
     print()
+
 
 if __name__ == '__main__':
     print("\033[1;32mStarting DataBase Access\033[0m")
@@ -989,7 +1041,28 @@ if __name__ == '__main__':
             else:
                 print('Sorry, wrong selection, please try again')
         elif sel == '3':
-            print("\033[4;35mStaff Options\033[0m\n1:View Room Bookings\n2:")
+            print(
+                "\033[4;35mStaff Options\033[0m\n1:View Room Bookings\n2:View Classes\n3:View Billing\n4:Register Staff")
+            op = input('->')
+            if op == '1':
+                print("Rooms Table")
+                format_table(get_rooms())
+            elif op == '2':
+                print("Classes Table")
+                format_table(get_classes())
+            elif op == '3':
+                print("Billing Table")
+                format_table(get_billings())
+            elif op == '3':
+                print("Billing Table")
+                format_table(get_billings())
+            elif op == '4':
+                print('Please Enter the following info')
+                first_name = input("First Name: ")
+                last_name = input("Last Name: ")
+                email = input("Email: ")
+                password = input("Password: ")
+                register_staff(first_name, last_name, email, password)
         elif sel == '4':
             break
         else:
