@@ -122,7 +122,7 @@ def member_dashboard():
         print("Error while retrieving member information:", error)
 
     return render_template('member_dashboard.html', member_info=member_info, dashboard=dashboard, metrics=metrics,
-                           fitness=fitness)
+                           fitness=fitness, billings=get_member_billing(member_info[0]))
 
 
 # Route for member profile page
@@ -339,6 +339,148 @@ def trainer_search_result(member_id):
         return "Member not found."
     return redirect(url_for('trainer_login'))
 
+
+@app.route('/staff_login', methods=['GET', 'POST'])
+def staff_login():
+    if request.method == 'POST':
+        # Check login credentials
+        staff_info = get_staff_info(request.form['username'])
+        if request.form['password'] == staff_info[4]:
+            session['staff_username'] = request.form['username']
+            return redirect(url_for('staff_dashboard'))
+        else:
+            return render_template('staff_login.html', error_message='Invalid username or password.')
+    return render_template('staff_login.html')
+
+
+@app.route('/staff_dashboard')
+def staff_dashboard():
+    if 'staff_username' not in session:
+        return redirect(url_for('staff_login'))
+    staff_info = get_staff_info(session['staff_username'])
+    return render_template('staff_dashboard.html', staff_info=staff_info)
+
+
+# Add the following route to the Flask app
+@app.route('/room_booking')
+def room_booking():
+    if 'staff_username' not in session:
+        return redirect(url_for('staff_login'))
+    # Add your room booking logic here
+    return render_template('room_booking.html')
+
+
+# Add the following route to the Flask app
+# @app.route('/equipment_view_maintenance')
+# def equipment_view_maintenance():
+#     if 'staff_username' not in session:
+#         return redirect(url_for('staff_login'))
+#     # Add your equipment viewing and maintenance logic here
+#     return render_template('equipment_view_maintenance.html', equipment=get_equipments())
+
+@app.route('/update_equipment_maintenance', methods=['POST'])
+def update_equipment_maintenancef():
+    if 'staff_username' not in session:
+        return redirect(url_for('staff_login'))
+
+    equipment_id = request.form.get('equipment_id')
+    last_maintenance_date = request.form.get('last_maintenance_date')
+    next_maintenance_date = request.form.get('next_maintenance_date')
+
+    # Update equipment maintenance in the database
+    update_equipment_maintenance(equipment_id, last_maintenance_date, next_maintenance_date)
+
+    print('Equipment maintenance updated successfully!', 'success')
+    return redirect(url_for('equipment_view_maintenance'))
+
+
+@app.route('/equipment_view_maintenance', methods=['GET', 'POST'])
+def equipment_view_maintenance():
+    if request.method == 'POST':
+        name = request.form['name']
+        last_maintenance_date = request.form['last_maintenance_date']
+        next_maintenance_date = request.form['next_maintenance_date']
+        add_equipment(name, last_maintenance_date, next_maintenance_date)
+        return redirect(url_for('equipment_view_maintenance'))
+    else:
+        equipment = get_equipments()  # Function to retrieve equipment data from the database
+        return render_template('equipment_view_maintenance.html', equipment=get_equipments())
+
+
+# Add the following route to the Flask app
+@app.route('/class_scheduler')
+def class_scheduler():
+    if 'staff_username' not in session:
+        return redirect(url_for('staff_login'))
+    print(get_classes())
+    # Add your class scheduling logic here
+    return render_template('class_scheduler.html', classes=get_classes(), rooms=get_rooms(), trainers=get_trainers())
+
+
+@app.route('/add_class', methods=['POST'])
+def add_class_route():
+    if 'staff_username' not in session:
+        return redirect(url_for('staff_login'))
+    if request.method == 'POST':
+        class_name = request.form['class_name']
+        trainer_id = request.form['trainer_id']
+        room_id = request.form['room_id']
+        start_time = request.form['start_time']
+        duration = request.form['duration']
+        day_of_week = request.form['day_of_week']
+        add_class(class_name, trainer_id, room_id, start_time, duration, day_of_week)
+    return redirect(url_for('class_scheduler'))
+
+
+@app.route('/delete_class', methods=['POST'])
+def delete_classf():
+    if 'staff_username' not in session:
+        return redirect(url_for('staff_login'))
+
+    class_id = request.form.get('delete_class_id')
+
+    if class_id:
+        delete_class(class_id)
+        print('Class deleted successfully!', 'success')
+    else:
+        print('Class ID not provided.', 'error')
+
+    return redirect(url_for('class_scheduler'))
+
+
+# Route to display billing page
+@app.route('/billing', methods=['GET', 'POST'])
+def billing():
+    if request.method == 'POST':
+        member_id = request.form['member_id']
+        amount = request.form['amount']
+        date = request.form['date']
+        description = request.form['description']
+        process_payment(member_id, amount, date, description)
+        return redirect(url_for('billing'))
+    else:
+        billings = get_billings()  # Function to retrieve billing data from the database
+        return render_template('billing.html', billings=billings)
+
+@app.route('/pay_payment', methods=['POST'])
+def process_payment_route():
+    if request.method == 'POST':
+        # Get the transaction_id from the form data
+        transaction_id = request.form.get('transaction_id')
+        print("Transaction:", transaction_id)
+        if transaction_id is None:
+            return "Error: Transaction ID not provided in the request"
+
+        # Get other form data from the form
+        member_id = request.form.get('member_id')
+        amount = request.form.get('amount')
+        date = request.form.get('date')
+        description = request.form.get('description')
+
+        # Process payment
+        pay_payment(transaction_id)
+
+    return redirect(url_for('member_dashboard'))
 
 if __name__ == '__main__':
     app.run(debug=True)

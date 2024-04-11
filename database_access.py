@@ -390,8 +390,108 @@ def book_room(room_name, capacity):
             cursor.close()
             conn.close()
 
+# Function for Administrative Staff Room Booking Management
+def get_rooms():
+    try:
+        conn = psycopg2.connect(
+            database="COMP3005GYM",
+            user="postgres",
+            password="3005",
+            host="localhost",
+            port='5432'
+        )
+        cursor = conn.cursor()
+
+        sql = """SELECT * 
+                FROM Room"""
+
+        cursor.execute(sql)
+        rooms = cursor.fetchall()
+        return rooms
+    except (Exception, psycopg2.Error) as error:
+        print("Error while getting room:", error)
+    finally:
+        if conn:
+            cursor.close()
+            conn.close()
+
+
+def get_trainers():
+    try:
+        conn = psycopg2.connect(
+            database="COMP3005GYM",
+            user="postgres",
+            password="3005",
+            host="localhost",
+            port='5432'
+        )
+        cursor = conn.cursor()
+
+        sql = """SELECT * 
+                FROM Trainer"""
+
+        cursor.execute(sql)
+        rooms = cursor.fetchall()
+        return rooms
+    except (Exception, psycopg2.Error) as error:
+        print("Error while getting trainers:", error)
+    finally:
+        if conn:
+            cursor.close()
+            conn.close()
+
+def get_billings():
+    try:
+        conn = psycopg2.connect(
+            database="COMP3005GYM",
+            user="postgres",
+            password="3005",
+            host="localhost",
+            port='5432'
+        )
+        cursor = conn.cursor()
+
+        sql = """SELECT * 
+                FROM Billing"""
+
+        cursor.execute(sql)
+        rooms = cursor.fetchall()
+        return rooms
+    except (Exception, psycopg2.Error) as error:
+        print("Error while getting billing:", error)
+    finally:
+        if conn:
+            cursor.close()
+            conn.close()
+
+def get_member_billing(member_id):
+    try:
+        conn = psycopg2.connect(
+            database="COMP3005GYM",
+            user="postgres",
+            password="3005",
+            host="localhost",
+            port='5432'
+        )
+        cursor = conn.cursor()
+
+        sql = """SELECT * 
+                FROM Billing
+                WHERE MemberID = %s"""
+
+        cursor.execute(sql, (member_id,))
+        billings = cursor.fetchall()
+        return billings
+    except (Exception, psycopg2.Error) as error:
+        print("Error while getting member billing:", error)
+    finally:
+        if conn:
+            cursor.close()
+            conn.close()
+
+
 # Function for Administrative Staff Equipment Maintenance Monitoring
-def monitor_equipment_maintenance(equipment_id, last_maintenance_date, next_maintenance_date):
+def update_equipment_maintenance(equipment_id, last_maintenance_date, next_maintenance_date):
     try:
         conn = psycopg2.connect(
             database="COMP3005GYM",
@@ -413,6 +513,119 @@ def monitor_equipment_maintenance(equipment_id, last_maintenance_date, next_main
     finally:
         if conn:
             cursor.close()
+            conn.close()
+
+# Function to add a new equipment
+def add_equipment(name, last_maintenance_date, next_maintenance_date):
+    try:
+        conn = psycopg2.connect(
+            database="COMP3005GYM",
+            user="postgres",
+            password="3005",
+            host="localhost",
+            port='5432'
+        )
+        cursor = conn.cursor()
+        sql = """INSERT INTO Equipment (EquipmentName, LastMaintenanceDate, NextMaintenanceDate)
+                 VALUES (%s, %s, %s)"""
+        cursor.execute(sql, (name, last_maintenance_date, next_maintenance_date))
+        conn.commit()
+        print("Equipment added successfully!")
+    except (Exception, psycopg2.Error) as error:
+        print("Error adding equipment:", error)
+    finally:
+        if conn:
+            conn.close()
+
+def get_equipments():
+    """Retrieve all equipment from the database."""
+    try:
+        conn = psycopg2.connect(
+            database="COMP3005GYM",
+            user="postgres",
+            password="3005",
+            host="localhost",
+            port='5432'
+        )
+        cursor = conn.cursor()
+        sql = """SELECT * FROM Equipment"""
+        cursor.execute(sql)
+        equipments = cursor.fetchall()
+        return equipments
+    except (Exception, psycopg2.Error) as error:
+        print("Error retrieving equipment:", error)
+    finally:
+        if conn:
+            conn.close()
+
+def get_classes():
+    """Retrieve all class schedules from the database with trainer and room details."""
+    try:
+        conn = psycopg2.connect(
+            database="COMP3005GYM",
+            user="postgres",
+            password="3005",
+            host="localhost",
+            port='5432'
+        )
+        cursor = conn.cursor()
+        sql = """SELECT cs.ClassID, cs.ClassName, t.FirstName, t.LastName, 
+                 cs.StartTime, cs.Duration, cs.DayofWeek, r.RoomName
+                 FROM ClassSchedule cs
+                 INNER JOIN Trainer t ON cs.TrainerID = t.TrainerID
+                 INNER JOIN Room r ON cs.RoomID = r.RoomID"""
+        cursor.execute(sql)
+        classes = cursor.fetchall()
+        return classes
+    except (Exception, psycopg2.Error) as error:
+        print("Error retrieving classes:", error)
+    finally:
+        if conn:
+            conn.close()
+
+# Function to add a new class to the database
+def add_class(class_name, trainer_id, room_id, start_time, duration, day_of_week):
+    conn = psycopg2.connect(
+        database="COMP3005GYM",
+        user="postgres",
+        password="3005",
+        host="localhost",
+        port='5432'
+    )
+    if conn:
+        try:
+            cursor = conn.cursor()
+            sql = """INSERT INTO ClassSchedule (ClassName, TrainerID, RoomID, StartTime, Duration, DayOfWeek)
+                     VALUES (%s, %s, %s, %s, %s, %s)"""
+            cursor.execute(sql, (class_name, trainer_id, room_id, start_time, duration, day_of_week))
+            conn.commit()
+            print("Class added successfully!")
+        except psycopg2.Error as e:
+            print("Error adding class:", e)
+        finally:
+            if conn:
+                conn.close()
+
+def delete_class(class_id):
+    """Delete a class from the database."""
+    try:
+        conn = psycopg2.connect(
+            database="COMP3005GYM",
+            user="postgres",
+            password="3005",
+            host="localhost",
+            port='5432'
+        )
+        cursor = conn.cursor()
+        sql = """DELETE FROM ClassSchedule WHERE ClassID = %s"""
+
+        cursor.execute(sql, (class_id,))
+        conn.commit()
+        print("Class deleted successfully!")
+    except (Exception, psycopg2.Error) as error:
+        print("Error deleting class:", error)
+    finally:
+        if conn:
             conn.close()
 
 # Function for Administrative Staff Class Schedule Updating
@@ -452,13 +665,38 @@ def process_payment(member_id, amount, date, description):
         )
         cursor = conn.cursor()
 
-        sql = """INSERT INTO Billing (MemberID, Amount, Date, Description)
-                 VALUES (%s, %s, %s, %s)"""
+        sql = """INSERT INTO Billing (MemberID, Amount, Date, Description, isPaid)
+                 VALUES (%s, %s, %s, %s, 'No')"""
         cursor.execute(sql, (member_id, amount, date, description))
         conn.commit()
         print("Payment processed successfully!")
     except (Exception, psycopg2.Error) as error:
         print("Error while processing payment:", error)
+    finally:
+        if conn:
+            cursor.close()
+            conn.close()
+
+def pay_payment(transaction_id):
+    try:
+        conn = psycopg2.connect(
+            database="COMP3005GYM",
+            user="postgres",
+            password="3005",
+            host="localhost",
+            port='5432'
+        )
+        cursor = conn.cursor()
+
+        # Update the billing entry to mark it as paid
+        sql = """UPDATE Billing 
+                 SET ispaid = %s 
+                 WHERE transactionid = %s"""
+        cursor.execute(sql, ("Yes", transaction_id))
+
+        conn.commit()
+    except (Exception, psycopg2.Error) as error:
+        print("Error processing payment:", error)
     finally:
         if conn:
             cursor.close()
@@ -499,7 +737,7 @@ def display_members_by_name(search_name):
             cursor.close()
             conn.close()
 
-def get_member_as_json():
+def get_staff_info(staff_id):
     try:
         conn = psycopg2.connect(
             database="COMP3005GYM",
@@ -508,34 +746,17 @@ def get_member_as_json():
             host="localhost",
             port='5432'
         )
-        cursor = conn.cursor()
-
-        sql = """SELECT * FROM Member"""
-        cursor.execute(sql)
-        members = cursor.fetchall()
-
-        # Convert data to JSON format
-        members_json = []
-        for member in members:
-            member_data = {
-                "MemberID": member[0],
-                "FirstName": member[1],
-                "LastName": member[2],
-                "Email": member[3],
-                "Address": member[5],
-                "Phone": member[6]
-                # Add more fields as needed
-            }
-            members_json.append(member_data)
-
-        return json.dumps(members_json, indent=4)
-    except (Exception, psycopg2.Error) as error:
-        print("Error while retrieving members:", error)
+        if conn:
+            cursor = conn.cursor()
+            sql = """SELECT * FROM administrativestaff WHERE StaffID = %s"""
+            cursor.execute(sql, (staff_id,))
+            staff_info = cursor.fetchone()
+            return staff_info
+    except psycopg2.Error as e:
+        print("Error retrieving staff information:", e)
     finally:
         if conn:
-            cursor.close()
             conn.close()
-
 
 # Print Tables
 def format_table(data):

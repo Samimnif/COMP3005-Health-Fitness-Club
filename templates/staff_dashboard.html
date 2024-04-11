@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link rel="icon" type="image/x-icon" href="/static/logo.jpg">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
+<body>
+<!-- Navigation Bar -->
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">COMP3005 GYM</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+                aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link active" href="/staff_dashboard">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/class_scheduler">Class Scheduler</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/equipment_view_maintenance">Equipment Manager</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/billing">Billing Manager</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-5">
+    <h1>Welcome to the Staff Dashboard</h1>
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <h3>Staff Information:</h3>
+            <ul class="list-group">
+                <li class="list-group-item"><strong>Staff ID:</strong> {{ staff_info[0] }}</li>
+                <li class="list-group-item"><strong>First Name:</strong> {{ staff_info[1] }}</li>
+                <li class="list-group-item"><strong>Last Name:</strong> {{ staff_info[2] }}</li>
+                <li class="list-group-item"><strong>Email:</strong> {{ staff_info[3] }}</li>
+                <!-- Add more staff information fields as needed -->
+            </ul>
+        </div>
+    </div>
+</div>
+</body>
+</html>

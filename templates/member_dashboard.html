@@ -38,7 +38,7 @@
                     out</a>
             </div>
             <a class="nav-link" aria-current="page" href="/member_profile"><i class="bi bi-person-circle"
-                                                                                  style="padding-right:5px;padding-left:15px"></i>Profile</a>
+                                                                              style="padding-right:5px;padding-left:15px"></i>Profile</a>
         </div>
     </div>
 </nav>
@@ -63,56 +63,136 @@
     <h3>Health Metrics</h3>
     <table class="table table-striped">
         <thead>
-            <tr class="table-info">
-                <th>Height</th>
-                <th>Weight</th>
-                <th>Muscle Mass</th>
-                <th>BPM</th>
-                <th>Date</th>
-            </tr>
+        <tr class="table-info">
+            <th>Height</th>
+            <th>Weight</th>
+            <th>Muscle Mass</th>
+            <th>BPM</th>
+            <th>Date</th>
+        </tr>
         </thead>
         <tbody>
-            {% for metric in metrics %}
-            <tr>
-                <td>{{ metric[2] }}</td>
-                <td>{{ metric[3] }}</td>
-                <td>{{ metric[4] }}</td>
-                <td>{{ metric[5] }}</td>
-                <td>{{ metric[6] }}</td>
-            </tr>
-            {% endfor %}
+        {% for metric in metrics %}
+        <tr>
+            <td>{{ metric[2] }}</td>
+            <td>{{ metric[3] }}</td>
+            <td>{{ metric[4] }}</td>
+            <td>{{ metric[5] }}</td>
+            <td>{{ metric[6] }}</td>
+        </tr>
+        {% endfor %}
         </tbody>
     </table>
 
     <h3>Fitness Goals</h3>
     <table class="table table-striped">
         <thead>
-            <tr class="table-info">
-                <th>Description</th>
-                <th>Goal Weight</th>
-                <th>Goal Time</th>
-                <th>Burned Calories</th>
-                <th>Total Sets</th>
-                <th>Total Reps</th>
-            </tr>
+        <tr class="table-info">
+            <th>Description</th>
+            <th>Goal Weight</th>
+            <th>Goal Time</th>
+            <th>Burned Calories</th>
+            <th>Total Sets</th>
+            <th>Total Reps</th>
+        </tr>
         </thead>
         <tbody>
-            {% for goal in fitness %}
-            <tr>
-                <td>{{ goal[2] }}</td>
-                <td>{{ goal[3] }}</td>
-                <td>{{ goal[4] }}</td>
-                <td>{{ goal[5] }}</td>
-                <td>{{ goal[6] }}</td>
-                <td>{{ goal[7] }}</td>
-            </tr>
-            {% endfor %}
+        {% for goal in fitness %}
+        <tr>
+            <td>{{ goal[2] }}</td>
+            <td>{{ goal[3] }}</td>
+            <td>{{ goal[4] }}</td>
+            <td>{{ goal[5] }}</td>
+            <td>{{ goal[6] }}</td>
+            <td>{{ goal[7] }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <!-- Billing Transactions Table -->
+    <h3>Billing Transactions</h3>
+    <table class="table table-striped">
+        <thead>
+        <tr class="table-info">
+            <th>Transaction ID</th>
+            <th>Member ID</th>
+            <th>Amount</th>
+            <th>Date</th>
+            <th>Description</th>
+            <th>Is Paid?</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for billing in billings %}
+        <tr>
+            <td>{{ billing[0] }}</td>
+            <td>{{ billing[1] }}</td>
+            <td>{{ billing[2] }}</td>
+            <td>{{ billing[3] }}</td>
+            <td>{{ billing[4] }}</td>
+            <td>{% if billing[5] == 'Yes' %}<i class="bi bi-check-circle" style="color:green"></i>{% endif %}{% if billing[5] == 'No' %}<i class="bi bi-x-circle" style="color:red"></i>{% endif %} {{ billing[5] }}</td>
+            <td>
+                {% if billing[5] == 'No' %}
+                <button type="button" class="btn btn-primary process-payment-btn" data-bs-toggle="modal"
+                        data-bs-target="#processPaymentModal" data-transaction-id="{{ billing[0] }}"
+                        data-member-id="{{ billing[1] }}" data-amount="{{ billing[2] }}" data-date="{{ billing[3] }}"
+                        data-description="{{ billing[4] }}">Process Payment
+                </button>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
         </tbody>
     </table>
 </div>
 
+<!-- Process Payment Modal -->
+<div class="modal fade" id="processPaymentModal" tabindex="-1" aria-labelledby="processPaymentModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="processPaymentModalLabel">Process Payment</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <img src="/static/payements/visa.svg" height="25px">
+                <img src="/static/payements/mastercard.svg" height="25px">
+                <img src="/static/payements/discover.svg" height="25px">
+                <br><br>
+                <form method="POST" action="/pay_payment">
+                    <div class="mb-3">
+                        <label for="card_number" class="form-label">Card Number:</label>
+                        <input type="text" class="form-control" id="card_number" name="card_number" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="full_name" class="form-label">Full Name:</label>
+                        <input type="text" class="form-control" id="full_name" name="full_name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="cvc_number" class="form-label">CVC Number:</label>
+                        <input type="text" class="form-control" id="cvc_number" name="cvc_number" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="expiration_date" class="form-label">Expiration Date:</label>
+                        <input type="text" class="form-control" id="expiration_date" name="expiration_date" placeholder="MM/YY" required>
+                    </div>
+                    <!-- Hidden input fields for transaction data -->
+                    <input type="hidden" id="transaction_id" name="transaction_id" readonly>
+                    <input type="hidden" id="member_id" name="member_id" readonly>
+                    <input type="hidden" id="amount" name="amount" readonly>
+                    <input type="hidden" id="date" name="date" readonly>
+                    <input type="hidden" id="description" name="description" readonly>
+                    <button type="submit" class="btn btn-primary">Confirm Payment</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Add Health Metric Modal -->
-<div class="modal fade" id="addHealthMetricModal" tabindex="-1" aria-labelledby="addHealthMetricModalLabel" aria-hidden="true">
+<div class="modal fade" id="addHealthMetricModal" tabindex="-1" aria-labelledby="addHealthMetricModalLabel"
+     aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -150,7 +230,8 @@
 </div>
 
 <!-- Add Fitness Goal Modal -->
-<div class="modal fade" id="addFitnessGoalModal" tabindex="-1" aria-labelledby="addFitnessGoalModalLabel" aria-hidden="true">
+<div class="modal fade" id="addFitnessGoalModal" tabindex="-1" aria-labelledby="addFitnessGoalModalLabel"
+     aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -204,6 +285,28 @@
     </button>
 </div>
 
+
+<!-- JavaScript to update transaction data in the modal -->
+<script>
+    var processPaymentModal = document.getElementById('processPaymentModal');
+    processPaymentModal.addEventListener('show.bs.modal', function (event) {
+        // Button that triggered the modal
+        var button = event.relatedTarget;
+        // Extract data from data-* attributes
+        var transactionId = button.getAttribute('data-transaction-id');
+        var memberId = button.getAttribute('data-member-id');
+        var amount = button.getAttribute('data-amount');
+        var date = button.getAttribute('data-date');
+        var description = button.getAttribute('data-description');
+        // Update the value of hidden input fields in the modal form
+        var modalForm = processPaymentModal.querySelector('form');
+        modalForm.querySelector('#transaction_id').value = transactionId;
+        modalForm.querySelector('#member_id').value = memberId;
+        modalForm.querySelector('#amount').value = amount;
+        modalForm.querySelector('#date').value = date;
+        modalForm.querySelector('#description').value = description;
+    });
+</script>
 
 <br><br><br><br><br><br><br><br><br><br><br><br>
 <!-- Footer -->

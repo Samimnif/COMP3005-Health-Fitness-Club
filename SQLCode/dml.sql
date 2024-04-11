@@ -52,6 +52,12 @@ VALUES
 (1, 1, '09:00:00', 'Monday', 60),
 (2, 2, '17:00:00', 'Friday', 60);
 
+-- Inserting sample data into ClassRegistration table
+INSERT INTO ClassRegistration (MemberID, ClassID, DateRegistration) VALUES
+(1, 1, '2024-04-15'),
+(2, 1, '2024-04-15'),
+(3, 2, '2024-04-15');
+
 -- Insert sample data into the TrainerAvailability table
 INSERT INTO TrainerAvailability (TrainerID, StartTime, EndTime, DayOfWeek)
 VALUES
@@ -67,7 +73,7 @@ VALUES
 (2, '14:00:00', '19:00:00', 'Friday');
 
 -- Insert sample data into the Billing table
-INSERT INTO Billing (MemberID, Amount, Date, Description)
+INSERT INTO Billing (MemberID, Amount, Date, Description, isPaid)
 VALUES
-(1, 50.00, '2024-04-01', 'Monthly membership fee'),
-(2, 75.00, '2024-04-05', 'Monthly membership fee');
+(1, 50.00, '2024-04-01', 'Monthly membership fee', 'No'),
+(2, 75.00, '2024-04-05', 'Monthly membership fee', 'Yes');

@@ -93,6 +93,16 @@ CREATE TABLE PersonalTrainingSession (
     FOREIGN KEY (TrainerID) REFERENCES Trainer(TrainerID)
 );
 
+CREATE TABLE ClassRegistration (
+  	RegistrationID SERIAL,
+  	MemberID INT,
+  	ClassID INT,
+  	DateRegistration DATE,
+  	PRIMARY KEY (RegistrationID),
+    FOREIGN KEY (MemberID) REFERENCES Member(MemberID),
+    FOREIGN KEY (ClassID) REFERENCES ClassSchedule(ClassID)
+);
+
 CREATE TABLE TrainerAvailability (
     AvailabilityID SERIAL,
     TrainerID INT,
@@ -109,6 +119,7 @@ CREATE TABLE Billing (
     Amount DECIMAL(10, 2),
     Date DATE,
   	Description VARCHAR(255),
+  	isPaid VARCHAR(255),
   	PRIMARY KEY (TransactionID),
     FOREIGN KEY (MemberID) REFERENCES Member(MemberID)
 );
