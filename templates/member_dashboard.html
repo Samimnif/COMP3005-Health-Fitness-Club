@@ -4,10 +4,130 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
+    <link rel="icon" type="image/x-icon" href="/static/logo.jpg">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 <body>
+
+<!-- Navigation Bar -->
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">COMP3005 GYM</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+                aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">Classes</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Pricing</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                       aria-expanded="false">
+                        Log In
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item active" href="/member_login">Members</a></li>
+                        <li><a class="dropdown-item" href="#">Trainers</a></li>
+                        <li><a class="dropdown-item" href="#">Staff</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <div class="ms-auto">
+                <a class="nav-link" aria-current="page" href="/member_logout"><i class="bi bi-box-arrow-left"
+                                                                                 style="padding-right:5px"></i>Log
+                    out</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Main Content Area -->
+<div class="container mt-5">
     <h2>Dashboard</h2>
-    <p>Welcome, {{ member_info.FirstName }} {{ member_info.LastName }}</p>
-    <!-- Display other dashboard information here -->
+    <p>Welcome, {{ member_info[1] }} {{ member_info[2] }}</p>
+
+    <h3>Dashboard Information</h3>
+    <div class="row">
+        <div class="col">
+            <h5>Member ID:</h5>
+            <p>{{ member_info[0] }}</p>
+        </div>
+        <div class="col">
+            <h5>Email:</h5>
+            <p>{{ member_info[3] }}</p>
+        </div>
+    </div>
+
+    <h3>Health Metrics</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Height</th>
+                <th>Weight</th>
+                <th>Muscle Mass</th>
+                <th>BPM</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for metric in metrics %}
+            <tr>
+                <td>{{ metric[2] }}</td>
+                <td>{{ metric[3] }}</td>
+                <td>{{ metric[4] }}</td>
+                <td>{{ metric[5] }}</td>
+                <td>{{ metric[6] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h3>Fitness Goals</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Description</th>
+                <th>Goal Weight</th>
+                <th>Goal Time</th>
+                <th>Burned Calories</th>
+                <th>Total Sets</th>
+                <th>Total Reps</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for goal in fitness %}
+            <tr>
+                <td>{{ goal[2] }}</td>
+                <td>{{ goal[3] }}</td>
+                <td>{{ goal[4] }}</td>
+                <td>{{ goal[5] }}</td>
+                <td>{{ goal[6] }}</td>
+                <td>{{ goal[7] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<br><br><br><br><br><br><br><br><br><br><br><br>
+<!-- Footer -->
+<footer class="bg-dark text-light text-center py-4">
+    <div class="container">
+        <p>&copy; 2024 Your App. All rights reserved.</p>
+        <!-- Add more footer content as needed -->
+    </div>
+</footer>
+
 </body>
 </html>

@@ -147,6 +147,7 @@ def display_health_metrics(member_id):
         if conn:
             cursor.close()
             conn.close()
+    return health_metrics_data
 
 # Function for displaying Fitness Goals for a Member
 def display_fitness_goals(member_id):
@@ -183,6 +184,7 @@ def display_fitness_goals(member_id):
         if conn:
             cursor.close()
             conn.close()
+    return fitness_goals_data
 
 # Function for Member Schedule Management
 def schedule_training_session(member_id, trainer_id, start_time, duration):
