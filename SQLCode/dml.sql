@@ -55,8 +55,7 @@ VALUES
 -- Inserting sample data into ClassRegistration table
 INSERT INTO ClassRegistration (MemberID, ClassID, DateRegistration) VALUES
 (1, 1, '2024-04-15'),
-(2, 1, '2024-04-15'),
-(3, 2, '2024-04-15');
+(2, 1, '2024-04-15');
 
 -- Insert sample data into the TrainerAvailability table
 INSERT INTO TrainerAvailability (TrainerID, StartTime, EndTime, DayOfWeek)

@@ -1,5 +1,4 @@
 import psycopg2
-import json
 
 con = psycopg2.connect(
     database="COMP3005GYM",
@@ -107,7 +106,6 @@ def display_member_dashboard(member_id):
         print("Email:", member_data[3])
         print("Address:", member_data[5])
         print("Phone:", member_data[6])
-        # Add more dashboard display information as needed
 
     except (Exception, psycopg2.Error) as error:
         print("Error while displaying member dashboard:", error)
@@ -1015,6 +1013,28 @@ def register_staff(firstname, lastname, email, password):
             conn.close()
 
 
+def register_trainer(firstname, lastname, email, password, specialization):
+    try:
+        conn = psycopg2.connect(
+            database="COMP3005GYM",
+            user="postgres",
+            password="3005",
+            host="localhost",
+            port='5432'
+        )
+        cursor = conn.cursor()
+        sql = """INSERT INTO Trainer (FirstName, LastName, Email, Password, Specialization) 
+                 VALUES (%s, %s, %s, %s, %s)"""
+        cursor.execute(sql, (firstname, lastname, email, password, specialization))
+        conn.commit()
+        print("Trainer registered successfully!")
+    except psycopg2.Error as e:
+        print("Error registering trainer:", e)
+    finally:
+        if conn:
+            conn.close()
+
+
 # Print Tables
 def format_table(data):
     if not data:
@@ -1086,7 +1106,8 @@ if __name__ == '__main__':
             else:
                 print('Sorry, wrong selection, please try again')
         elif sel == '2':
-            print("\033[4;34mTrainer Options:\033[0m\n1:Schedule Management\n2:Search For a memeber\n3:Exit")
+            print(
+                "\033[4;34mTrainer Options:\033[0m\n1:Schedule Management\n2:Search For a memeber\n3:Trainer Register\n4:Exit")
             op = input('->')
             if op == '1':
                 # availabilities = [
@@ -1113,13 +1134,22 @@ if __name__ == '__main__':
                 search_name = input("Search for a member by name ")
                 display_members_by_name(search_name)
             elif op == '3':
+                print('Please Enter the following info')
+                first_name = input("First Name: ")
+                last_name = input("Last Name: ")
+                email = input("Email: ")
+                password = input("Password: ")
+                special = input("Specialization: ")
+                register_trainer(first_name, last_name, email, password, special)
+            elif op == '4':
                 sel = ''
                 continue
             else:
                 print('Sorry, wrong selection, please try again')
         elif sel == '3':
             print(
-                "\033[4;35mStaff Options\033[0m\n1:View Room Bookings\n2:View Classes\n3:View Billing\n4:Register Staff")
+                "\033[4;35mStaff Options\033[0m\n1:View Room Bookings\n2:View Classes\n3:View Billing"
+                "\n4:Register Staff\n5:Exit")
             op = input('->')
             if op == '1':
                 print("Rooms Table")
@@ -1140,6 +1170,9 @@ if __name__ == '__main__':
                 email = input("Email: ")
                 password = input("Password: ")
                 register_staff(first_name, last_name, email, password)
+            elif op == '5':
+                sel = ''
+                continue
         elif sel == '4':
             break
         else:

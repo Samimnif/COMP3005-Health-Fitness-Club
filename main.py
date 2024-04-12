@@ -101,7 +101,6 @@ def member_login():
 def member_logout():
     # Clear the session data
     session.pop('member_email', None)
-    # Redirect the user to the home page or any other desired page
     return redirect(url_for('home'))
 
 
@@ -118,7 +117,7 @@ def member_register():
 
         # Register the member
         register_member(first_name, last_name, email, password, address, phone)
-        return redirect(url_for('member_login'))  # Redirect to login page after registration
+        return redirect(url_for('member_login'))
 
     return render_template('member_register.html')
 
@@ -129,9 +128,6 @@ def member_dashboard():
     # Check if member is logged in
     if 'member_email' not in session:
         return redirect(url_for('member_login'))
-
-    # Retrieve member information from the database (you'll need to implement this)
-    # Example: member_info = get_member_info(session['email'])
     conn = connect_db()
     try:
         cursor = conn.cursor()
@@ -160,8 +156,6 @@ def member_profile():
     if 'member_email' not in session:
         return redirect(url_for('member_login'))
 
-    # Retrieve member information from the database (you'll need to implement this)
-    # Example: member_info = get_member_info(session['email'])
     conn = connect_db()
     try:
         cursor = conn.cursor()
@@ -180,7 +174,8 @@ def member_profile():
 # Route for updating member profile
 @app.route('/update_profile', methods=['POST'])
 def update_profile():
-    if 'email' not in session:
+    print("Got here")
+    if 'member_email' not in session:
         return redirect(url_for('member_login'))
 
     if request.method == 'POST':
@@ -189,7 +184,6 @@ def update_profile():
         last_name = request.form['last_name']
         email = request.form['email']
         address = request.form['address']
-        phone = request.form['phone']
 
         phone = request.form['phone']
         member_id = request.form['member_id']
@@ -200,7 +194,7 @@ def update_profile():
             update_member_profile(member_id, first_name, last_name, email, password, address, phone)
             return redirect(url_for('member_profile'))
         except Exception as e:
-            # Handle any errors that occur during the update process
+
             return render_template('error.html', error_message=str(e))
 
 
@@ -261,9 +255,6 @@ def register_class():
 
         print(member_id, "class_id:", class_id)
         register_for_class(member_id, class_id)
-        # Add your code here to handle the registration for the class
-        # This could involve inserting the registration details into a database
-
         return redirect(url_for('member_classes'))
 
 
@@ -273,8 +264,8 @@ def register_personal_session():
         # Extract the form data
         member_id = request.form.get('member_id')
         trainer_id = request.form.get('trainer_id')
-        requested_day = request.form.get('session_day')  # Assuming this is a string like "Monday"
-        requested_time = request.form.get('session_time')  # Assuming this is a string like "09:30"session_duration
+        requested_day = request.form.get('session_day')
+        requested_time = request.form.get('session_time')
         requested_duration = request.form.get('session_duration')
 
         trainers_info = get_trainer_availabilities(trainer_id)
@@ -284,17 +275,14 @@ def register_personal_session():
 
         # Check if the requested day and time fall within any of the available slots
         for slot in trainers_info:
-            if requested_day.lower() == slot[4].lower():  # Check if the requested day matches the available slot day
-                if slot[2] <= requested_time_obj <= slot[
-                    3]:  # Check if the requested time falls within the available slot time range
+            if requested_day.lower() == slot[4].lower():
+                if slot[2] <= requested_time_obj <= slot[3]:
                     # If the requested day and time fall within an available slot, proceed with registration
                     register_for_personal_session(member_id, trainer_id, requested_time, requested_day, requested_duration)
                     return redirect(url_for('member_classes'))
 
-        # If no available slot matches the requested day and time, return an error message
         return "Requested day and time are not available for the selected trainer."
 
-    # Handle cases where the request method is not POST
     return "Invalid request method"
 
 
@@ -352,8 +340,6 @@ def trainer_scheduler():
 
     trainer_schedule = get_trainer_availabilities(trainer_info[0])
 
-    # Assuming you have time slots and days of the week defined somewhere in your code
-    # Example:
     time_slots = ['8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00',
                   '17:00', '18:00', '19:00', '20:00', '21:00']
     days_of_week = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
@@ -414,8 +400,7 @@ def update_trainer_schedule():
 @app.route('/trainer_search')
 def trainer_search():
     # Get the list of members
-    members = list_member()  # Assuming list_members() returns the list of members
-
+    members = list_member()
     return render_template('trainer_search.html', members=members)
 
 
@@ -472,7 +457,6 @@ def staff_dashboard():
 def room_booking():
     if 'staff_username' not in session:
         return redirect(url_for('staff_login'))
-    # Add your room booking logic here
     return render_template('member_classes.html')
 
 @app.route('/update_equipment_maintenance', methods=['POST'])
@@ -588,8 +572,6 @@ def cancel_class():
     if 'member_email' not in session:
         return redirect(url_for('member_login'))
 
-    # Retrieve member information from the database (you'll need to implement this)
-    # Example: member_info = get_member_info(session['email'])
     conn = connect_db()
     try:
         cursor = conn.cursor()
@@ -606,7 +588,6 @@ def cancel_class():
         # Extract class cancellation data from the form
         class_id = request.form.get('class_id')
         unregister_class(member_info[0], class_id)
-        # Add your code here to cancel the class registration
 
     return redirect(url_for('member_classes'))
 
@@ -618,8 +599,6 @@ def reschedule_personal_session():
     if 'member_email' not in session:
         return redirect(url_for('member_login'))
 
-    # Retrieve member information from the database (you'll need to implement this)
-    # Example: member_info = get_member_info(session['email'])
     conn = connect_db()
     try:
         cursor = conn.cursor()
@@ -648,16 +627,14 @@ def reschedule_personal_session():
         for slot in trainer_availabilities:
             print(slot)
             if new_day.lower() == slot[4].lower():  # Check if the requested day matches the available slot day
-                if slot[2] <= new_time_obj <= slot[3]:  # Check if the requested time falls within the available slot time range
+                if slot[2] <= new_time_obj <= slot[3]:
                     # If the requested day and time fall within an available slot, proceed with rescheduling
                     unregister_personal_session(member_info[0], session_id)
                     register_for_personal_session(member_info[0], trainer_id, new_time, new_day, duration)
                     return redirect(url_for('member_classes'))
 
-            # If no available slot matches the requested day and time, return an error message
         return "Requested day and time are not available for the selected trainer."
 
-    # Handle cases where the request method is not POST
     return "Invalid request method"
 
 
@@ -668,8 +645,6 @@ def cancel_personal_session():
     if 'member_email' not in session:
         return redirect(url_for('member_login'))
 
-    # Retrieve member information from the database (you'll need to implement this)
-    # Example: member_info = get_member_info(session['email'])
     conn = connect_db()
     try:
         cursor = conn.cursor()
