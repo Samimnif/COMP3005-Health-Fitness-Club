@@ -7,6 +7,7 @@ Sami Mnif - 101199669
 ## Demo Link
 
 [![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/quCgDmJowH4/0.jpg)](https://youtu.be/quCgDmJowH4?si=bSUWdujCsxDQ1cK4)
+<br>https://youtu.be/quCgDmJowH4?si=bSUWdujCsxDQ1cK4
 
 ## Quick overview & Testing Instructions
 
