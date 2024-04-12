@@ -1,16 +1,17 @@
+"""
+database_access.py
+
+Please Make sure to update the connect_db() with your postegresql info
+Final Project Flask Webserver
+Sami Mnif - 101199669
+"""
 import psycopg2
 
-con = psycopg2.connect(
-    database="COMP3005GYM",
-    user="postgres",
-    password="3005",
-    host="localhost",
-    port='5432'
-)
-
-
-# Function for Member Registration
-def register_member(first_name, last_name, email, password, address, phone):
+# Function to connect to the database
+"""
+Please Update the database name, port #, user and password
+"""
+def connect_db():
     try:
         conn = psycopg2.connect(
             database="COMP3005GYM",
@@ -19,6 +20,15 @@ def register_member(first_name, last_name, email, password, address, phone):
             host="localhost",
             port='5432'
         )
+        return conn
+    except (Exception, psycopg2.Error) as error:
+        print("Error while connecting to PostgreSQL:", error)
+        return None
+
+# Function for Member Registration
+def register_member(first_name, last_name, email, password, address, phone):
+    try:
+        conn = connect_db()
         cursor = conn.cursor()
 
         sql = """INSERT INTO Member (FirstName, LastName, Email, Password, Address, Phone)
@@ -37,13 +47,7 @@ def register_member(first_name, last_name, email, password, address, phone):
 # Getter Function for Member
 def list_member():
     try:
-        conn = psycopg2.connect(
-            database="COMP3005GYM",
-            user="postgres",
-            password="3005",
-            host="localhost",
-            port='5432'
-        )
+        conn = connect_db()
         cursor = conn.cursor()
 
         sql = """SELECT * FROM Member"""
@@ -62,13 +66,7 @@ def list_member():
 # Function for Member Profile Management
 def update_member_profile(member_id, first_name, last_name, email, password, address, phone):
     try:
-        conn = psycopg2.connect(
-            database="COMP3005GYM",
-            user="postgres",
-            password="3005",
-            host="localhost",
-            port='5432'
-        )
+        conn = connect_db()
         cursor = conn.cursor()
 
         sql = """UPDATE Member
@@ -88,13 +86,7 @@ def update_member_profile(member_id, first_name, last_name, email, password, add
 # Function for Member Dashboard Display
 def display_member_dashboard(member_id):
     try:
-        conn = psycopg2.connect(
-            database="COMP3005GYM",
-            user="postgres",
-            password="3005",
-            host="localhost",
-            port='5432'
-        )
+        conn = connect_db()
         cursor = conn.cursor()
 
         sql = """SELECT * FROM Member WHERE MemberID = %s"""
@@ -119,13 +111,7 @@ def display_member_dashboard(member_id):
 # Function for displaying Health Metrics for a Member
 def display_health_metrics(member_id):
     try:
-        conn = psycopg2.connect(
-            database="COMP3005GYM",
-            user="postgres",
-            password="3005",
-            host="localhost",
-            port='5432'
-        )
+        conn = connect_db()
         cursor = conn.cursor()
 
         sql = """SELECT * FROM HealthMetrics WHERE MemberID = %s"""
@@ -156,13 +142,7 @@ def display_health_metrics(member_id):
 # Function for displaying Fitness Goals for a Member
 def display_fitness_goals(member_id):
     try:
-        conn = psycopg2.connect(
-            database="COMP3005GYM",
-            user="postgres",
-            password="3005",
-            host="localhost",
-            port='5432'
-        )
+        conn = connect_db()
         cursor = conn.cursor()
 
         sql = """SELECT * FROM FitnessGoals WHERE MemberID = %s"""
@@ -194,13 +174,7 @@ def display_fitness_goals(member_id):
 # Function for inserting a fitness goal into the database
 def insert_fitness_goal(member_id, description, goal_weight, goal_time, burned_calories, total_sets, total_reps):
     try:
-        conn = psycopg2.connect(
-            database="COMP3005GYM",
-            user="postgres",
-            password="3005",
-            host="localhost",
-            port='5432'
-        )
+        conn = connect_db()
         cursor = conn.cursor()
 
         sql = """INSERT INTO FitnessGoals (MemberID, Description, GoalWeight, GoalTime, BurnedCalories, TotalSets, TotalReps)
@@ -220,13 +194,7 @@ def insert_fitness_goal(member_id, description, goal_weight, goal_time, burned_c
 # Function for inserting a health metric into the database
 def insert_health_metric(member_id, height, weight, muscle_mass, bpm, data_date):
     try:
-        conn = psycopg2.connect(
-            database="COMP3005GYM",
-            user="postgres",
-            password="3005",
-            host="localhost",
-            port='5432'
-        )
+        conn = connect_db()
         cursor = conn.cursor()
 
         sql = """INSERT INTO HealthMetrics (MemberID, Height, Weight, MuscleMass, BPM, DataDate)
@@ -246,13 +214,7 @@ def insert_health_metric(member_id, height, weight, muscle_mass, bpm, data_date)
 # Function for Member Schedule Management
 def schedule_training_session(member_id, trainer_id, start_time, duration):
     try:
-        conn = psycopg2.connect(
-            database="COMP3005GYM",
-            user="postgres",
-            password="3005",
-            host="localhost",
-            port='5432'
-        )
+        conn = connect_db()
         cursor = conn.cursor()
 
         sql = """INSERT INTO PersonalTrainingSession (MemberID, TrainerID, StartTime, Duration)
@@ -270,13 +232,7 @@ def schedule_training_session(member_id, trainer_id, start_time, duration):
 
 def get_schedule(member_id, trainer_id):
     try:
-        conn = psycopg2.connect(
-            database="COMP3005GYM",
-            user="postgres",
-            password="3005",
-            host="localhost",
-            port='5432'
-        )
+        conn = connect_db()
         cursor = conn.cursor()
 
         sql = """SELECT * FROM PersonalTrainingSession 
@@ -299,13 +255,7 @@ def get_schedule(member_id, trainer_id):
 
 def get_member_personal_session(member_id):
     try:
-        conn = psycopg2.connect(
-            database="COMP3005GYM",
-            user="postgres",
-            password="3005",
-            host="localhost",
-            port='5432'
-        )
+        conn = connect_db()
         cursor = conn.cursor()
 
         sql = """SELECT pts.*, t.firstname, t.lastname 
@@ -331,13 +281,7 @@ def get_member_personal_session(member_id):
 
 def get_class_registration(member_id):
     try:
-        conn = psycopg2.connect(
-            database="COMP3005GYM",
-            user="postgres",
-            password="3005",
-            host="localhost",
-            port='5432'
-        )
+        conn = connect_db()
         cursor = conn.cursor()
 
         sql = """SELECT c.*, cr.dateregistration, t.firstname, t.lastname 
@@ -365,13 +309,7 @@ def get_class_registration(member_id):
 # Function for setting Trainer Availability
 def set_trainer_availability(trainer_id, availabilities):
     try:
-        conn = psycopg2.connect(
-            database="COMP3005GYM",
-            user="postgres",
-            password="3005",
-            host="localhost",
-            port='5432'
-        )
+        conn = connect_db()
         cursor = conn.cursor()
 
         # Delete existing availability slots for the trainer
@@ -398,13 +336,7 @@ def set_trainer_availability(trainer_id, availabilities):
 
 # Function for retrieving trainer information by ID
 def get_trainer_info(trainer_id):
-    conn = psycopg2.connect(
-        database="COMP3005GYM",
-        user="postgres",
-        password="3005",
-        host="localhost",
-        port='5432'
-    )
+    conn = connect_db()
     if conn:
         try:
             cursor = conn.cursor()
@@ -421,13 +353,7 @@ def get_trainer_info(trainer_id):
 
 # Function for retrieving trainer availabilities by ID
 def get_trainer_availabilities(trainer_id):
-    conn = psycopg2.connect(
-        database="COMP3005GYM",
-        user="postgres",
-        password="3005",
-        host="localhost",
-        port='5432'
-    )
+    conn = connect_db()
     if conn:
         try:
             cursor = conn.cursor()
@@ -444,13 +370,7 @@ def get_trainer_availabilities(trainer_id):
 
 def register_for_class(member_id, class_id):
     try:
-        conn = psycopg2.connect(
-            database="COMP3005GYM",
-            user="postgres",
-            password="3005",
-            host="localhost",
-            port='5432'
-        )
+        conn = connect_db()
         cursor = conn.cursor()
 
         # Check if the member is already registered for the class
@@ -482,13 +402,7 @@ def register_for_class(member_id, class_id):
 
 def unregister_class(member_id, class_id):
     try:
-        conn = psycopg2.connect(
-            database="COMP3005GYM",
-            user="postgres",
-            password="3005",
-            host="localhost",
-            port='5432'
-        )
+        conn = connect_db()
         cursor = conn.cursor()
 
         # Check if the member is registered for the class
@@ -520,13 +434,7 @@ def unregister_class(member_id, class_id):
 
 def unregister_personal_session(member_id, session_id):
     try:
-        conn = psycopg2.connect(
-            database="COMP3005GYM",
-            user="postgres",
-            password="3005",
-            host="localhost",
-            port='5432'
-        )
+        conn = connect_db()
         cursor = conn.cursor()
 
         # Check if the member is registered for the personal session
@@ -558,13 +466,7 @@ def unregister_personal_session(member_id, session_id):
 
 def register_for_personal_session(member_id, trainer_id, time, day, duration):
     try:
-        conn = psycopg2.connect(
-            database="COMP3005GYM",
-            user="postgres",
-            password="3005",
-            host="localhost",
-            port='5432'
-        )
+        conn = connect_db()
         cursor = conn.cursor()
 
         # Insert new personal session
@@ -588,13 +490,7 @@ def register_for_personal_session(member_id, trainer_id, time, day, duration):
 # Function for Administrative Staff Room Booking Management
 def create_room(room_name, capacity):
     try:
-        conn = psycopg2.connect(
-            database="COMP3005GYM",
-            user="postgres",
-            password="3005",
-            host="localhost",
-            port='5432'
-        )
+        conn = connect_db()
         cursor = conn.cursor()
 
         sql = """INSERT INTO Room (RoomName, Capacity)
@@ -613,13 +509,7 @@ def create_room(room_name, capacity):
 # Function for Administrative Staff Room Booking Management
 def get_rooms():
     try:
-        conn = psycopg2.connect(
-            database="COMP3005GYM",
-            user="postgres",
-            password="3005",
-            host="localhost",
-            port='5432'
-        )
+        conn = connect_db()
         cursor = conn.cursor()
 
         sql = """SELECT * 
@@ -638,13 +528,7 @@ def get_rooms():
 
 def get_trainers():
     try:
-        conn = psycopg2.connect(
-            database="COMP3005GYM",
-            user="postgres",
-            password="3005",
-            host="localhost",
-            port='5432'
-        )
+        conn = connect_db()
         cursor = conn.cursor()
 
         sql = """SELECT * 
@@ -663,13 +547,7 @@ def get_trainers():
 
 def get_billings():
     try:
-        conn = psycopg2.connect(
-            database="COMP3005GYM",
-            user="postgres",
-            password="3005",
-            host="localhost",
-            port='5432'
-        )
+        conn = connect_db()
         cursor = conn.cursor()
 
         sql = """SELECT * 
@@ -688,13 +566,7 @@ def get_billings():
 
 def get_member_billing(member_id):
     try:
-        conn = psycopg2.connect(
-            database="COMP3005GYM",
-            user="postgres",
-            password="3005",
-            host="localhost",
-            port='5432'
-        )
+        conn = connect_db()
         cursor = conn.cursor()
 
         sql = """SELECT * 
@@ -715,13 +587,7 @@ def get_member_billing(member_id):
 # Function for Administrative Staff Equipment Maintenance Monitoring
 def update_equipment_maintenance(equipment_id, last_maintenance_date, next_maintenance_date):
     try:
-        conn = psycopg2.connect(
-            database="COMP3005GYM",
-            user="postgres",
-            password="3005",
-            host="localhost",
-            port='5432'
-        )
+        conn = connect_db()
         cursor = conn.cursor()
 
         sql = """UPDATE Equipment
@@ -741,13 +607,7 @@ def update_equipment_maintenance(equipment_id, last_maintenance_date, next_maint
 # Function to add a new equipment
 def add_equipment(name, last_maintenance_date, next_maintenance_date):
     try:
-        conn = psycopg2.connect(
-            database="COMP3005GYM",
-            user="postgres",
-            password="3005",
-            host="localhost",
-            port='5432'
-        )
+        conn = connect_db()
         cursor = conn.cursor()
         sql = """INSERT INTO Equipment (EquipmentName, LastMaintenanceDate, NextMaintenanceDate)
                  VALUES (%s, %s, %s)"""
@@ -764,13 +624,7 @@ def add_equipment(name, last_maintenance_date, next_maintenance_date):
 def get_equipments():
     """Retrieve all equipment from the database."""
     try:
-        conn = psycopg2.connect(
-            database="COMP3005GYM",
-            user="postgres",
-            password="3005",
-            host="localhost",
-            port='5432'
-        )
+        conn = connect_db()
         cursor = conn.cursor()
         sql = """SELECT * FROM Equipment"""
         cursor.execute(sql)
@@ -786,13 +640,7 @@ def get_equipments():
 def get_classes():
     """Retrieve all class schedules from the database with trainer and room details."""
     try:
-        conn = psycopg2.connect(
-            database="COMP3005GYM",
-            user="postgres",
-            password="3005",
-            host="localhost",
-            port='5432'
-        )
+        conn = connect_db()
         cursor = conn.cursor()
         sql = """SELECT cs.ClassID, cs.ClassName, t.FirstName, t.LastName, 
                  cs.StartTime, cs.Duration, cs.DayofWeek, r.RoomName
@@ -811,13 +659,7 @@ def get_classes():
 
 # Function to add a new class to the database
 def add_class(class_name, trainer_id, room_id, start_time, duration, day_of_week):
-    conn = psycopg2.connect(
-        database="COMP3005GYM",
-        user="postgres",
-        password="3005",
-        host="localhost",
-        port='5432'
-    )
+    conn = connect_db()
     if conn:
         try:
             cursor = conn.cursor()
@@ -836,13 +678,7 @@ def add_class(class_name, trainer_id, room_id, start_time, duration, day_of_week
 def delete_class(class_id):
     """Delete a class from the database."""
     try:
-        conn = psycopg2.connect(
-            database="COMP3005GYM",
-            user="postgres",
-            password="3005",
-            host="localhost",
-            port='5432'
-        )
+        conn = connect_db()
         cursor = conn.cursor()
         sql = """DELETE FROM ClassSchedule WHERE ClassID = %s"""
 
@@ -859,13 +695,7 @@ def delete_class(class_id):
 # Function for Administrative Staff Class Schedule Updating
 def update_class_schedule(class_id, class_name, trainer_id, room_id, start_time, duration, day_of_week):
     try:
-        conn = psycopg2.connect(
-            database="COMP3005GYM",
-            user="postgres",
-            password="3005",
-            host="localhost",
-            port='5432'
-        )
+        conn = connect_db()
         cursor = conn.cursor()
 
         sql = """UPDATE ClassSchedule
@@ -885,13 +715,7 @@ def update_class_schedule(class_id, class_name, trainer_id, room_id, start_time,
 # Function for Administrative Staff Billing and Payment Processing
 def process_payment(member_id, amount, date, description):
     try:
-        conn = psycopg2.connect(
-            database="COMP3005GYM",
-            user="postgres",
-            password="3005",
-            host="localhost",
-            port='5432'
-        )
+        conn = connect_db()
         cursor = conn.cursor()
 
         sql = """INSERT INTO Billing (MemberID, Amount, Date, Description, isPaid)
@@ -909,13 +733,7 @@ def process_payment(member_id, amount, date, description):
 
 def pay_payment(transaction_id):
     try:
-        conn = psycopg2.connect(
-            database="COMP3005GYM",
-            user="postgres",
-            password="3005",
-            host="localhost",
-            port='5432'
-        )
+        conn = connect_db()
         cursor = conn.cursor()
 
         # Update the billing entry to mark it as paid
@@ -936,13 +754,7 @@ def pay_payment(transaction_id):
 # Function to display members by search name
 def display_members_by_name(search_name):
     try:
-        conn = psycopg2.connect(
-            database="COMP3005GYM",
-            user="postgres",
-            password="3005",
-            host="localhost",
-            port='5432'
-        )
+        conn = connect_db()
         cursor = conn.cursor()
 
         sql = """SELECT * FROM Member 
@@ -971,13 +783,7 @@ def display_members_by_name(search_name):
 
 def get_staff_info(staff_id):
     try:
-        conn = psycopg2.connect(
-            database="COMP3005GYM",
-            user="postgres",
-            password="3005",
-            host="localhost",
-            port='5432'
-        )
+        conn = connect_db()
         if conn:
             cursor = conn.cursor()
             sql = """SELECT * FROM administrativestaff WHERE StaffID = %s"""
@@ -993,13 +799,7 @@ def get_staff_info(staff_id):
 
 def register_staff(firstname, lastname, email, password):
     try:
-        conn = psycopg2.connect(
-            database="COMP3005GYM",
-            user="postgres",
-            password="3005",
-            host="localhost",
-            port='5432'
-        )
+        conn = connect_db()
         cursor = conn.cursor()
         sql = """INSERT INTO administrativestaff (FirstName, LastName, Email, Password) 
                  VALUES (%s, %s, %s, %s)"""
@@ -1015,13 +815,7 @@ def register_staff(firstname, lastname, email, password):
 
 def register_trainer(firstname, lastname, email, password, specialization):
     try:
-        conn = psycopg2.connect(
-            database="COMP3005GYM",
-            user="postgres",
-            password="3005",
-            host="localhost",
-            port='5432'
-        )
+        conn = connect_db()
         cursor = conn.cursor()
         sql = """INSERT INTO Trainer (FirstName, LastName, Email, Password, Specialization) 
                  VALUES (%s, %s, %s, %s, %s)"""

@@ -1,4 +1,8 @@
 """
+main.py
+host the flask webserver
+
+Please Make sure to update the connect_db() with your postegresql info
 Final Project Flask Webserver
 Sami Mnif - 101199669
 """
@@ -11,16 +15,10 @@ from collections import defaultdict
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
-
-@app.template_filter('string_to_time')
-def string_to_time(value):
-    parts = value.split(':')
-    hour = int(parts[0])
-    minute = int(parts[1].split()[0])  # Extract minutes and remove AM/PM
-    return time(hour, minute)
-
-
 # Function to connect to the database
+"""
+Please Update the database name, port #, user and password
+"""
 def connect_db():
     try:
         conn = psycopg2.connect(
@@ -34,6 +32,13 @@ def connect_db():
     except (Exception, psycopg2.Error) as error:
         print("Error while connecting to PostgreSQL:", error)
         return None
+
+@app.template_filter('string_to_time')
+def string_to_time(value):
+    parts = value.split(':')
+    hour = int(parts[0])
+    minute = int(parts[1].split()[0])  # Extract minutes and remove AM/PM
+    return time(hour, minute)
 
 def reschedule_personal_session_in_db(session_id, new_date, new_time):
     try:
