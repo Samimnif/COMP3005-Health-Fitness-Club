@@ -18,6 +18,7 @@ There are two main components in this project:
 
 * To Test the Command line: run `database_access.py`.
 * To Test the Webserver: run `main.py`
+
 ## Table Creation
 
 Use the ddl.sql file under the /SQLCode folder to create the needed tables for this project
@@ -25,7 +26,12 @@ Then use the dml.sql file to insert sample data to manipulate with the functiona
 
 ## Demo Link
 
+<iframe width="560" height="315" src="https://www.youtube.com/embed/quCgDmJowH4?si=4dQOWHhTrmniqHJ8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+[![youtube img](https://youtu.be/quCgDmJowH4?si=bSUWdujCsxDQ1cK4/0.jpg)](https://youtu.be/quCgDmJowH4?si=bSUWdujCsxDQ1cK4 "Demo Video")
+
 <hr>
 
 # Copyright
+
 © Copyright 2024 Sami Mnif

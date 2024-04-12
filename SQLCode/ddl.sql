@@ -18,7 +18,7 @@ CREATE TABLE HealthMetrics (
   	BPM INT,
   	DataDate DATE,
   	PRIMARY KEY (HealthMetricID),
-  	FOREIGN KEY (MemberID) REFERENCES Member
+  	FOREIGN KEY (MemberID) REFERENCES Member(MemberID)
 );
 
 CREATE TABLE FitnessGoals (
@@ -31,7 +31,7 @@ CREATE TABLE FitnessGoals (
 	TotalSets INT,
 	TotalReps INT,
   	PRIMARY KEY (GoalID),
-  	FOREIGN KEY (MemberID) REFERENCES Member
+  	FOREIGN KEY (MemberID) REFERENCES Member(MemberID)
 );
 
 CREATE TABLE Trainer (
