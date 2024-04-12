@@ -20,7 +20,7 @@ There are two main components in this project:
 2. `main.py`: this python file, starts the flask server in the local port 5000 and will display a website. You can
    navigate through the webserver using the nav bar. You can register a member and access their data.
 
-> [!IMPORTANT] 
+> [!WARNING] 
 > Before Testing, please make sure the `connect_db()` function is updated with your postgresql info
 ```python
 def connect_db():
