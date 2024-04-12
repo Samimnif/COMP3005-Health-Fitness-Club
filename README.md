@@ -28,7 +28,7 @@ Then use the dml.sql file to insert sample data to manipulate with the functiona
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/quCgDmJowH4?si=4dQOWHhTrmniqHJ8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
-[![youtube img](https://youtu.be/quCgDmJowH4?si=bSUWdujCsxDQ1cK4/0.jpg)](https://youtu.be/quCgDmJowH4?si=bSUWdujCsxDQ1cK4 "Demo Video")
+[![youtube img]((https://img.youtube.com/vi/quCgDmJowH4/0.jpg)](https://youtu.be/quCgDmJowH4?si=bSUWdujCsxDQ1cK4 "Demo Video")
 
 <hr>
 
