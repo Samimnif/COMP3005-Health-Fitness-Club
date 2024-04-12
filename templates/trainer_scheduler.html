@@ -33,7 +33,8 @@
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/trainer_scheduler"><i class="bi bi-table"></i> Dashboard</a>
+                    <a class="nav-link active" aria-current="page" href="/trainer_scheduler"><i class="bi bi-table"></i>
+                        Dashboard</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/trainer_search"><i class="bi bi-search"></i>Search Tool</a>
@@ -74,23 +75,36 @@
         <tr>
             <td>{{ slot }}</td>
             {% for day in days %}
-            {% set is_available = false %}
-            {% for schedule_slot in schedule %}
-            {% if schedule_slot[4] == day %}
-            {% set schedule_start_time = schedule_slot[2] %}
-            {% set schedule_end_time = schedule_slot[3] %}
-            {% set slot_time = slot | string_to_time %}
-            {% if slot_time >= schedule_start_time and slot_time <= schedule_end_time %}
-            {% set is_available = true %}
-            {% if is_available %}
-            <td class="bg-success text-white">Available</td>
-            {% endif %}
-            {% endif %}
-            {% endif %}
-            {% endfor %}
+            <td class="{% for schedule_slot in schedule %}
+                           {% set slot_time=slot | string_to_time %}
+                           {% if schedule_slot[4]== day %}
+                           {% if slot_time>= schedule_slot[2] and slot_time <= schedule_slot[3]%}
+                           bg-success
+                           {% endif %}
+                           {% endif %}
+                           {% endfor %} text-white">Available
+            </td>
             {% endfor %}
         </tr>
         {% endfor %}
+        <!--
+        {% for slot in time_slots %}
+            <tr>
+                <td>{{ slot }}</td>
+                {% for day in days %}
+                    {% set is_available = false %}
+
+                    {% for schedule_slot in schedule %}
+                        {% if schedule_slot[4] == day %}
+                            {% set slot_time = slot | string_to_time %}
+                            {% if slot_time >= schedule_slot[2] and slot_time <= schedule_slot[3] %}
+                                <td class="bg-success text-white">Available {{ schedule_slot[2] }}</td>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+            </tr>
+        {% endfor %}-->
         </tbody>
     </table>
 
@@ -130,9 +144,9 @@
                                         <input class="form-check-input" type="checkbox" name="availabilities[]"
                                                id="{{ availability_id }}" value="{{ availability_id }}"
                                                {% for schedule_slot in schedule %}
-                                               {% set slot_time = slot | string_to_time %}
+                                               {% set slot_time=slot | string_to_time %}
                                                {% if schedule_slot[4]== day %}
-                                               {% if slot_time == schedule_slot[2] or slot_time == schedule_slot[3]%}
+                                               {% if slot_time== schedule_slot[2] or slot_time== schedule_slot[3]%}
                                                checked
                                                {% endif %}
                                                {% endif %}

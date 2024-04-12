@@ -26,10 +26,10 @@
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="#">Classes</a>
+                    <a class="nav-link active" href="/member_classes">Classes</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" href="/member_classes">My Classes</a>
+                    <a class="nav-link" href="/member_dashboard">Dashboard</a>
                 </li>
             </ul>
             <div class="ms-auto">
@@ -70,24 +70,30 @@
             <td>{{ class[6] }}</td>
             <td>{{ class[5] }}</td>
             <td>
-                <!-- Add action buttons for rescheduling or canceling -->
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                        data-bs-target="#rescheduleModal{{ class.id }}">Reschedule
-                </button>
                 <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                        data-bs-target="#cancelModal{{ class.id }}">Cancel
+                        data-bs-target="#cancelModal{{ class[0] }}">Cancel
                 </button>
             </td>
         </tr>
-        <!-- Modal for rescheduling class -->
-        <div class="modal fade" id="rescheduleModal{{ class.id }}" tabindex="-1"
-             aria-labelledby="rescheduleModalLabel{{ class.id }}" aria-hidden="true">
-            <!-- Modal content for rescheduling class goes here -->
-        </div>
-        <!-- Modal for canceling class -->
-        <div class="modal fade" id="cancelModal{{ class.id }}" tabindex="-1"
-             aria-labelledby="cancelModalLabel{{ class.id }}" aria-hidden="true">
-            <!-- Modal content for canceling class goes here -->
+        <!-- Modal for canceling a class -->
+        <div class="modal fade" id="cancelModal{{ class[0] }}" tabindex="-1" aria-labelledby="cancelClassModalLabelc"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="cancelClassModalLabelc">Cancel Class</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to cancel this class?</p>
+                        <!-- Form for canceling a class -->
+                        <form method="POST" action="/cancel_class">
+                            <input type="hidden" id="class_id" name="class_id" value="{{ class[0] }}" readonly>
+                            <button type="submit" class="btn btn-danger">Yes, Cancel</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
         {% endfor %}
         </tbody>
@@ -114,22 +120,71 @@
             <td>
                 <!-- Add action buttons for rescheduling or canceling -->
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                        data-bs-target="#rescheduleSessionModal{{ session.id }}">Reschedule
+                        data-bs-target="#rescheduleSessionModal{{ session[0] }}">Reschedule
                 </button>
                 <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                        data-bs-target="#cancelSessionModal{{ session.id }}">Cancel
+                        data-bs-target="#cancelSessionModal{{ session[0] }}">Cancel
                 </button>
             </td>
         </tr>
-        <!-- Modal for rescheduling personal training session -->
-        <div class="modal fade" id="rescheduleSessionModal{{ session.id }}" tabindex="-1"
-             aria-labelledby="rescheduleSessionModalLabel{{ session.id }}" aria-hidden="true">
-            <!-- Modal content for rescheduling session goes here -->
+        <!-- Modal for rescheduling a personal training session -->
+        <div class="modal fade" id="rescheduleSessionModal{{ session[0] }}" tabindex="-1"
+             aria-labelledby="rescheduleSessionModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="rescheduleSessionModalLabel">Reschedule Personal Training
+                            Session</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Form for rescheduling a personal training session -->
+                        <form method="POST" action="/reschedule_personal_session">
+                            <input type="hidden" id="session_id" name="session_id" value="{{ session[0] }}" readonly>
+                            <input type="hidden" id="trainer_id" name="trainer_id" value="{{ session[2] }}" readonly>
+                            <input type="hidden" id="re-duration" name="re-duration" value="{{ session[5] }}" readonly>
+                                                        <div class="mb-3">
+                                <label for="resessionDay" class="form-label">New Time</label>
+                                <select class="form-select" id="resessionDay" name="resession_day" required>
+                                    <!-- Loop through list of trainers and generate options -->
+                                    {% for day in days_of_week %}
+                                    <option value="{{ day }}">{{ day }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="newSessionTime" class="form-label">New Date</label>
+                                <input type="time" class="form-control" id="newSessionTime" name="new_time"
+                                       required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Reschedule</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
-        <!-- Modal for canceling personal training session -->
-        <div class="modal fade" id="cancelSessionModal{{ session.id }}" tabindex="-1"
-             aria-labelledby="cancelSessionModalLabel{{ session.id }}" aria-hidden="true">
-            <!-- Modal content for canceling session goes here -->
+
+        <!-- Modal for canceling a personal training session -->
+        <div class="modal fade" id="cancelSessionModal{{ session[0] }}" tabindex="-1"
+             aria-labelledby="cancelSessionModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="cancelSessionModalLabel">Cancel Personal Training Session</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to cancel this personal training session?</p>
+                        <!-- Form for canceling a personal training session -->
+                        <form method="POST" action="/cancel_personal_session">
+                            <input type="hidden" id="session_id" name="session_id" value="{{ session[0] }}" readonly>
+                            <button type="submit" class="btn btn-danger">Yes, Cancel</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
         {% endfor %}
         </tbody>
@@ -194,7 +249,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="sessionDay" class="form-label">Session Day</label>
-                        <select class="form-select"  id="sessionDay" name="session_day" required>
+                        <select class="form-select" id="sessionDay" name="session_day" required>
                             <!-- Loop through list of trainers and generate options -->
                             {% for day in days_of_week %}
                             <option value="{{ day }}">{{ day }}</option>

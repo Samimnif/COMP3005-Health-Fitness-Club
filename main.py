@@ -1,7 +1,12 @@
+"""
+Final Project Flask Webserver
+Sami Mnif - 101199669
+"""
 import psycopg2
 from flask import Flask, render_template, request, redirect, url_for, session
 from database_access import *
 from datetime import datetime, time
+from collections import defaultdict
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
@@ -30,6 +35,29 @@ def connect_db():
         print("Error while connecting to PostgreSQL:", error)
         return None
 
+def reschedule_personal_session_in_db(session_id, new_date, new_time):
+    try:
+        conn = connect_db()
+        cursor = conn.cursor()
+
+        # Convert new_time to a time object
+        new_time_obj = datetime.strptime(new_time, '%H:%M').time()
+
+        # Update the personal training session with the new date and time
+        sql_update = "UPDATE PersonalTrainingSession SET SessionDate = %s, SessionTime = %s WHERE SessionID = %s"
+        cursor.execute(sql_update, (new_date, new_time_obj, session_id))
+        conn.commit()
+
+        return True
+
+    except (Exception, psycopg2.Error) as error:
+        print("Error rescheduling personal session:", error)
+        return False
+
+    finally:
+        if conn:
+            cursor.close()
+            conn.close()
 
 @app.route('/')
 def home():
@@ -224,7 +252,6 @@ def member_classes():
                            classes=get_classes(), trainers=get_trainers(), member_info=member_info,
                            days_of_week=days_of_week)
 
-
 @app.route('/register_class', methods=['POST'])
 def register_class():
     if request.method == 'POST':
@@ -237,7 +264,7 @@ def register_class():
         # Add your code here to handle the registration for the class
         # This could involve inserting the registration details into a database
 
-        return "Class registration successful!"
+        return redirect(url_for('member_classes'))
 
 
 @app.route('/register_personal_session', methods=['POST'])
@@ -262,7 +289,7 @@ def register_personal_session():
                     3]:  # Check if the requested time falls within the available slot time range
                     # If the requested day and time fall within an available slot, proceed with registration
                     register_for_personal_session(member_id, trainer_id, requested_time, requested_day, requested_duration)
-                    return "Personal session registration successful!"
+                    return redirect(url_for('member_classes'))
 
         # If no available slot matches the requested day and time, return an error message
         return "Requested day and time are not available for the selected trainer."
@@ -353,10 +380,24 @@ def update_trainer_schedule():
 
             # Retrieve availabilities from the form data
             availabilities = request.form.getlist('availabilities[]')
-            print(availabilities)
 
+            # Group availabilities by day and combine them into a single tuple
+            availability_dict = defaultdict(list)
+            for availability in availabilities:
+                start_time, day = availability.split('-', 1)
+                availability_dict[day].append(start_time)
+
+            combined_availabilities = []
+            for day, start_times in availability_dict.items():
+                start_times = [datetime.strptime(start_time, '%H:%M') for start_time in start_times]
+                start_times.sort()
+                start_time = start_times[0].strftime('%H:%M')
+                end_time = start_times[-1].strftime('%H:%M')
+                combined_availabilities.append((start_time, end_time, day))
+
+            print(combined_availabilities)
             # Update trainer schedule in the database
-            set_trainer_availability(trainer_id, availabilities)
+            set_trainer_availability(trainer_id, combined_availabilities)
 
             return redirect(url_for('trainer_scheduler'))
 
@@ -433,15 +474,6 @@ def room_booking():
         return redirect(url_for('staff_login'))
     # Add your room booking logic here
     return render_template('member_classes.html')
-
-
-# Add the following route to the Flask app
-# @app.route('/equipment_view_maintenance')
-# def equipment_view_maintenance():
-#     if 'staff_username' not in session:
-#         return redirect(url_for('staff_login'))
-#     # Add your equipment viewing and maintenance logic here
-#     return render_template('equipment_view_maintenance.html', equipment=get_equipments())
 
 @app.route('/update_equipment_maintenance', methods=['POST'])
 def update_equipment_maintenancef():
@@ -548,6 +580,114 @@ def process_payment_route():
 
     return redirect(url_for('member_dashboard'))
 
+
+# Route for canceling a class
+@app.route('/cancel_class', methods=['POST'])
+def cancel_class():
+    # Check if member is logged in
+    if 'member_email' not in session:
+        return redirect(url_for('member_login'))
+
+    # Retrieve member information from the database (you'll need to implement this)
+    # Example: member_info = get_member_info(session['email'])
+    conn = connect_db()
+    try:
+        cursor = conn.cursor()
+        # Retrieve member information based on email
+        sql = """SELECT * FROM Member WHERE Email = %s"""
+        cursor.execute(sql, (session['member_email'],))
+        member_info = cursor.fetchone()
+    except (Exception, psycopg2.Error) as error:
+        print("Error while retrieving member information:", error)
+    finally:
+        if conn:
+            conn.close()
+    if request.method == 'POST':
+        # Extract class cancellation data from the form
+        class_id = request.form.get('class_id')
+        unregister_class(member_info[0], class_id)
+        # Add your code here to cancel the class registration
+
+    return redirect(url_for('member_classes'))
+
+
+# Route for rescheduling a personal training session
+@app.route('/reschedule_personal_session', methods=['POST'])
+def reschedule_personal_session():
+    # Check if member is logged in
+    if 'member_email' not in session:
+        return redirect(url_for('member_login'))
+
+    # Retrieve member information from the database (you'll need to implement this)
+    # Example: member_info = get_member_info(session['email'])
+    conn = connect_db()
+    try:
+        cursor = conn.cursor()
+        # Retrieve member information based on email
+        sql = """SELECT * FROM Member WHERE Email = %s"""
+        cursor.execute(sql, (session['member_email'],))
+        member_info = cursor.fetchone()
+    except (Exception, psycopg2.Error) as error:
+        print("Error while retrieving member information:", error)
+    finally:
+        if conn:
+            conn.close()
+    if request.method == 'POST':
+        # Extract the form data
+        session_id = request.form.get('session_id')
+        trainer_id = request.form.get('trainer_id')
+        new_day = request.form.get('resession_day')  # Assuming this is a string like "Monday"
+        new_time = request.form.get('new_time')  # Assuming this is a string like "09:30"
+        duration = request.form.get('re-duration')
+
+        # Convert new_time to a time object
+        new_time_obj = datetime.strptime(new_time, '%H:%M').time()
+        trainer_availabilities = get_trainer_availabilities(trainer_id)
+
+        # Check if the requested day and time fall within any of the available slots for the trainer
+        for slot in trainer_availabilities:
+            print(slot)
+            if new_day.lower() == slot[4].lower():  # Check if the requested day matches the available slot day
+                if slot[2] <= new_time_obj <= slot[3]:  # Check if the requested time falls within the available slot time range
+                    # If the requested day and time fall within an available slot, proceed with rescheduling
+                    unregister_personal_session(member_info[0], session_id)
+                    register_for_personal_session(member_info[0], trainer_id, new_time, new_day, duration)
+                    return redirect(url_for('member_classes'))
+
+            # If no available slot matches the requested day and time, return an error message
+        return "Requested day and time are not available for the selected trainer."
+
+    # Handle cases where the request method is not POST
+    return "Invalid request method"
+
+
+# Route for canceling a personal training session
+@app.route('/cancel_personal_session', methods=['POST'])
+def cancel_personal_session():
+    # Check if member is logged in
+    if 'member_email' not in session:
+        return redirect(url_for('member_login'))
+
+    # Retrieve member information from the database (you'll need to implement this)
+    # Example: member_info = get_member_info(session['email'])
+    conn = connect_db()
+    try:
+        cursor = conn.cursor()
+        # Retrieve member information based on email
+        sql = """SELECT * FROM Member WHERE Email = %s"""
+        cursor.execute(sql, (session['member_email'],))
+        member_info = cursor.fetchone()
+    except (Exception, psycopg2.Error) as error:
+        print("Error while retrieving member information:", error)
+    finally:
+        if conn:
+            conn.close()
+    if request.method == 'POST':
+        # Extract personal session cancellation data from the form
+        session_id = request.form.get('session_id')
+        unregister_personal_session(member_info[0], session_id)
+
+    return redirect(url_for('member_classes'))
 
 if __name__ == '__main__':
     app.run(debug=True)

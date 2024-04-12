@@ -22,7 +22,7 @@
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link active" href="/staff_dashboard">Dashboard</a>
+                    <a class="nav-link" href="/staff_dashboard">Dashboard</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/class_scheduler">Class Scheduler</a>
@@ -31,7 +31,7 @@
                     <a class="nav-link" href="/equipment_view_maintenance">Equipment Manager</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/billing">Billing Manager</a>
+                    <a class="nav-link active" href="/billing">Billing Manager</a>
                 </li>
             </ul>
         </div>
@@ -42,9 +42,9 @@
 <div class="container mt-5">
     <h2>Billing Manager</h2>
     <!-- Table of Billing Transactions -->
-    <table class="table table-bordered mt-3">
+    <table class="table table-striped  mt-3">
         <thead>
-        <tr>
+        <tr class="table-dark">
             <th>ID</th>
             <th>Member ID</th>
             <th>Amount</th>
@@ -55,13 +55,13 @@
         </thead>
         <tbody>
         {% for billing in billings %}
-        <tr>
+        <tr {% if billing[5] == 'Yes' %}class="table-success"{% endif %}{% if billing[5] == 'No' %}class="table-danger"{% endif %}>
             <td>{{ billing[0] }}</td>
             <td>{{ billing[1] }}</td>
             <td>{{ billing[2] }}</td>
             <td>{{ billing[3] }}</td>
             <td>{{ billing[4] }}</td>
-            <td>{{ billing[5] }}</td>
+            <td>{% if billing[5] == 'Yes' %}<i class="bi bi-check-circle" style="color:green"></i>{% endif %}{% if billing[5] == 'No' %}<i class="bi bi-x-circle" style="color:red"></i>{% endif %} {{ billing[5] }}</td>
         </tr>
         {% endfor %}
         </tbody>

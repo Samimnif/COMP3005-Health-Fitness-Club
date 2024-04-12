@@ -482,6 +482,82 @@ def register_for_class(member_id, class_id):
             conn.close()
 
 
+def unregister_class(member_id, class_id):
+    try:
+        conn = psycopg2.connect(
+            database="COMP3005GYM",
+            user="postgres",
+            password="3005",
+            host="localhost",
+            port='5432'
+        )
+        cursor = conn.cursor()
+
+        # Check if the member is registered for the class
+        sql_check = "SELECT * FROM ClassRegistration WHERE MemberID = %s AND ClassID = %s"
+        cursor.execute(sql_check, (member_id, class_id))
+        existing_registration = cursor.fetchone()
+
+        if not existing_registration:
+            print("Member is not registered for this class.")
+            return False
+
+        # Delete the class registration
+        sql_delete = "DELETE FROM ClassRegistration WHERE MemberID = %s AND ClassID = %s"
+        cursor.execute(sql_delete, (member_id, class_id))
+        conn.commit()
+
+        print("Class registration deleted successfully.")
+        return True
+
+    except (Exception, psycopg2.Error) as error:
+        print("Error unregistering from class:", error)
+        return False
+
+    finally:
+        if conn:
+            cursor.close()
+            conn.close()
+
+
+def unregister_personal_session(member_id, session_id):
+    try:
+        conn = psycopg2.connect(
+            database="COMP3005GYM",
+            user="postgres",
+            password="3005",
+            host="localhost",
+            port='5432'
+        )
+        cursor = conn.cursor()
+
+        # Check if the member is registered for the personal session
+        sql_check = "SELECT * FROM PersonalTrainingSession WHERE MemberID = %s AND SessionID = %s"
+        cursor.execute(sql_check, (member_id, session_id))
+        existing_registration = cursor.fetchone()
+
+        if not existing_registration:
+            print("Member is not registered for this personal session.")
+            return False
+
+        # Delete the personal session registration
+        sql_delete = "DELETE FROM PersonalTrainingSession WHERE MemberID = %s AND SessionID = %s"
+        cursor.execute(sql_delete, (member_id, session_id))
+        conn.commit()
+
+        print("Personal session registration deleted successfully.")
+        return True
+
+    except (Exception, psycopg2.Error) as error:
+        print("Error unregistering from personal session:", error)
+        return False
+
+    finally:
+        if conn:
+            cursor.close()
+            conn.close()
+
+
 def register_for_personal_session(member_id, trainer_id, time, day, duration):
     try:
         conn = psycopg2.connect(
@@ -915,6 +991,7 @@ def get_staff_info(staff_id):
     finally:
         if conn:
             conn.close()
+
 
 def register_staff(firstname, lastname, email, password):
     try:
